@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>でっちあげ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="base.css">
+    <link rel="icon" href="img/favicon (1).ico">
+    <style>
+        .hero-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .rating-stars {
+            color: #fbbf24;
+        }
+
+        .rating-large {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .character-card {
+            transition: transform 0.3s ease;
+
+        }
+
+        .character-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .character-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .accordion-button:not(.collapsed)::after {
+            filter: invert(1) brightness(1.3) contrast(1.3);
+        }
+
+        .accordion-button::after {
+            filter: invert(0);
+        }
+
+
+        .stat-card {
+            background: linear-gradient(135deg, #4c1d95 0%, #312e81 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .action-btn {
+            transition: transform 0.2s ease;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .carousel-item img {
+            height: 400px;
+            object-fit: cover;
+            object-position: 50% 15%;
+            border-radius: 10px;
+        }
+
+        .float-link {
+            display: inline-block;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .float-link:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ナビゲーションバー -->
+    <nav class="navbar navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-film"></i> CinemaList
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar"
+                aria-labelledby="offcanvasNavbarLabel">
+
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">メニュー</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 text-center">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="index.html">ホーム</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="anime-list.html">作品一覧</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="anime-ranking.html">ランキング</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="anime-mylist.html">マイリスト</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="anime-community.html">コミュニティ</a>
+                        </li>
+
+                        <li class="nav-item mt-4">
+                            <a href="anime-login.html" class="btn btn-light px-5">
+                                <i class="bi bi-person-circle"></i> ログイン
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- パンくずリスト -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">ホーム</a></li>
+                <li class="breadcrumb-item"><a href="anime-list.html">作品一覧</a></li>
+                <li class="breadcrumb-item active" aria-current="page">でっちあげ ~殺人教師といわれた男~</li>
+            </ol>
+        </nav>
+
+        <!-- 作品メイン情報 -->
+        <div class="row mb-5">
+            <div class="col-lg-8">
+                <!-- 画像カルーセル -->
+                <div id="animeCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#animeCarousel" data-bs-slide-to="0"
+                            class="active"></button>
+                        <button type="button" data-bs-target="#animeCarousel" data-bs-slide-to="1"></button>
+                        <button type="button" data-bs-target="#animeCarousel" data-bs-slide-to="2"></button>
+                        <button type="button" data-bs-target="#animeCarousel" data-bs-slide-to="3"></button>
+                    </div>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="https://www.toei.co.jp/entertainment/news/detail/__icsFiles/afieldfile/2025/04/04/0407.JPG"
+                                class="d-block w-100" alt="メインビジュアル">
+                            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+                                <h5></h5>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://media.eiga.com/images/movie/103667/photo/7cf107571a7818df.jpg"
+                                class="d-block w-100" alt="バトルシーン">
+                            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+                                <h5></h5>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://imgc.eximg.jp/i=https%253A%252F%252Fs.eximg.jp%252Fexnews%252Ffeed%252Fpia_jp%252F94%252Fpia_jp_bb44ec26_b303_48bd_9924_9fd09be3c08e%252Fpia_jp_bb44ec26_b303_48bd_9924_9fd09be3c08e_1.jpg,zoom=600,quality=70,type=webp"
+                                class="d-block w-100" alt="日常シーン">
+                            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+                                <h5></h5>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://otocoto.jp/wp-content/uploads/2025/05/3117e82f761d9513b873d98b3ef10199-1080x720.png"
+                                class="d-block w-100" alt="異世界の風景">
+                            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+                                <h5></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#animeCarousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                        <span class="visually-hidden">前へ</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#animeCarousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                        <span class="visually-hidden">次へ</span>
+                    </button>
+                </div>
+
+                <!-- タイトルと基本情報 -->
+                <div class="mb-4">
+                    <div class="d-flex gap-2 mb-3">
+                        <span class="badge bg-primary fs-6">ヒューマンドラマ</span>
+                        <span class="badge bg-warning text-dark fs-6">スリラー</span>
+                        <span class="badge bg-success fs-6">放送中</span>
+                        <span class="badge bg-danger fs-6">人気</span>
+                    </div>
+                    <h1 class="display-4 fw-bold mb-3">でっちあげ <br>~殺人教師といわれた男~</h1>
+                    <p class="lead text-muted">trump up</p>
+                </div>
+
+                <!-- あらすじ -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title fw-bold mb-3"><i class="bi bi-book"></i> あらすじ</h3>
+                        <p class="card-text">
+                            2003年、福岡の小学校で、ある担任教師・薮下誠一（映画での役名）が、児童の母親・氷室律子から「息子への体罰やいじめで自殺に追い込もうとした」と告発されます。メディアや行政は母親の主張を信じ込み、事実関係の調査が不十分なまま、教師は「殺人教師」というレッテルを貼られ、社会的制裁を受けます。
+
+                        </p>
+                        <p class="card-text">
+                            教諭は事実無根を訴えましたが、学校長は事なかれ主義で対応し、周囲も教諭を避けるようになります。厳しい状況下で、取材を行ったジャーナリスト（または事実を追う者）は、母親の過激な主張や、背景にある不可解な状況に疑問を抱きます。真実を明らかにするため、当時のクラスメイトや関係者への地道な聞き取りが始まります。
+
+                        </p>
+                        <p class="card-text">
+                            取材と調査により、母親が主張していた「体罰」や「いじめ」は、実際には捏造されたものであり、子供の行動や他の児童の証言が母親によって誘導されていた可能性が浮上します。2013年、福岡市人事委員会はいじめの事実を認定せず、教師の処分を取り消しました。この物語は、被害者と加害者が逆転する恐怖と、メディアと大衆が作り出す真実の脆さを描き出します。
+
+
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 作品情報アコーディオン -->
+                <div class="accordion mb-4" id="animeInfoAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#staffInfo">
+                                <i class="bi bi-people-fill me-2"></i> スタッフ情報
+                            </button>
+                        </h2>
+                        <div id="staffInfo" class="accordion-collapse collapse show"
+                            data-bs-parent="#animeInfoAccordion">
+                            <div class="accordion-body">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <strong>原作:</strong> 福田ますみ
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <strong>監督:</strong> 三池崇史
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <strong>プロデュース:</strong> 和佐野健一
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <strong>音楽:</strong> キタニタツヤ
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#broadcastInfo">
+                                <i class="bi bi-tv me-2"></i> 放送情報
+                            </button>
+                        </h2>
+                        <div id="broadcastInfo" class="accordion-collapse collapse"
+                            data-bs-parent="#animeInfoAccordion">
+                            <div class="accordion-body">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <strong>放送時期:</strong> 2025年秋
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <strong>配信:</strong> Amazon Prime Video、Netflix、U-NEXT
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#musicInfo">
+                                <i class="bi bi-music-note-beamed me-2"></i> 主題歌・音楽
+                            </button>
+                        </h2>
+                        <div id="musicInfo" class="accordion-collapse collapse" data-bs-parent="#animeInfoAccordion">
+                            <div class="accordion-body">
+                                <div class="mb-3">
+                                    <strong>主題歌:</strong><br>
+                                    なくしもの / キタ二タツヤ
+                                </div>
+
+                                <div>
+                                    <strong>劇伴:</strong><br>
+                                    遠藤浩二
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- サイドバー -->
+            <div class="col-lg-4">
+                <!-- 評価カード -->
+                <div class="stat-card mb-4">
+                    <div class="text-center">
+                        <div class="rating-large mb-2">4.5</div>
+                        <div class="rating-stars fs-3 mb-3">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-half"></i>
+                        </div>
+                        <p class="mb-0"><a href="anime-review.html"
+                                class="link-light link-underline link-underline-opacity-0 link-underline-opacity-100-hover float-link">1,234件のレビュー</a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- アクションボタン -->
+                <div class="d-grid gap-2 mb-4">
+                    <button class="btn btn-primary btn-lg action-btn">
+                        <i class="bi bi-star"></i> マイリストに追加
+                    </button>
+                    <button class="btn btn-outline-primary btn-lg action-btn">
+                        <i class="bi bi-pencil-square"></i> レビューを書く
+                    </button>
+                    <button class="btn btn-outline-secondary btn-lg action-btn">
+                        <i class="bi bi-share"></i> シェアする
+                    </button>
+                </div>
+
+                <!-- 統計情報 -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-3"><i class="bi bi-bar-chart-fill"></i> 統計情報</h5>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>視聴中</span>
+                                <strong>8,234人</strong>
+                            </div>
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar bg-success" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>視聴済み</span>
+                                <strong>2,456人</strong>
+                            </div>
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar bg-primary" style="width: 40%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>視聴予定</span>
+                                <strong>15,678人</strong>
+                            </div>
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar bg-warning" style="width: 90%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- タグ -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-3"><i class="bi bi-tags-fill"></i> タグ</h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-info">#ヒューマンドラマ</span>
+                            <span class="badge bg-info">#スリラー</span>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 関連リンク -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-3"><i class="bi bi-link-45deg"></i> 関連リンク</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <a href="#" class="text-decoration-none">
+                                    <i class="bi bi-globe"></i> 公式サイト
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="text-decoration-none">
+                                    <i class="bi bi-twitter-x"></i> 公式X
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="text-decoration-none">
+                                    <i class="bi bi-youtube"></i> 公式YouTube
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="text-decoration-none">
+                                    <i class="bi bi-book"></i> 原作小説
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- キャラクター紹介 -->
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-people-fill"></i> 登場人物</h2>
+
+            <div class="accordion" id="characterAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#mainCharacters">
+                            登場人物
+                        </button>
+                    </h2>
+                    <div id="mainCharacters" class="accordion-collapse collapse show"
+                        data-bs-parent="#characterAccordion">
+                        <div class="accordion-body">
+                            <div class="row g-4">
+                                <div class="col-md-3">
+                                    <div class="card character-card h-100">
+                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqJYKs5x523WXyWyMzOnCyNpVZGbhUDTCofw&s"
+                                            class="card-img-top character-img" alt="佐藤翔太">
+                                        <div class="card-body">
+                                            <h5 class="card-title fw-bold">薮下誠一</h5>
+                                            <p class="text-muted small mb-2">綾野剛</p>
+                                            <p class="card-text small">
+                                                彼は「殺人教師」と呼ばれながらも、その告発は「でっちあげ」だと主張し、マスコミや世論の標的になっていく中で苦悩する役どころです。 </p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card character-card h-100">
+                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpWwZHYQ9OOlgXlQgEZuKKrzPifc-nqczYnA&s"
+                                            class="card-img-top character-img" alt="エリナ">
+                                        <div class="card-body">
+                                            <h5 class="card-title fw-bold">氷室律子</h5>
+                                            <p class="text-muted small mb-2">柴咲コウ</p>
+                                            <p class="card-text small">体罰で告発された小学校教師・薮下誠一（綾野剛）を訴える保護者・氷室律子（ひむろ
+                                                りつこ）役です。彼女は、自分の息子への体罰を告発し、物語の中心となる重要な役どころを演じています。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card character-card h-100">
+                                        <img src="https://img.cinematoday.jp/a/G2MgHnr4NFL1/_size_640x/_v_1751009502/a.jpg"
+                                            class="card-img-top character-img" alt="リュウ">
+                                        <div class="card-body">
+                                            <h5 class="card-title fw-bold">鳴海三千彦</h5>
+                                            <p class="text-muted small mb-2">亀梨和也</p>
+                                            <p class="card-text small">彼は事件を実名報道し物語を大きく動かす重要な役割で、クールで危うさも感じさせるキャラクターです。
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card character-card h-100">
+                                        <img src="https://pbs.twimg.com/media/Gqtt27Ha8AAahZS.jpg"
+                                            class="card-img-top character-img" alt="ルナ">
+                                        <div class="card-body">
+                                            <h5 class="card-title fw-bold">氷室拓馬</h5>
+                                            <p class="text-muted small mb-2">迫田孝也</p>
+                                            <p class="card-text small">
+                                                柴咲コウさん演じる氷室律子の夫。妻（律子）に寄り添い、主人公の薮下（綾野剛）を糾弾する父親という役どころです</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#subCharacters">
+                            サブキャラクター
+                        </button>
+                    </h2>
+                    <div id="subCharacters" class="accordion-collapse collapse" data-bs-parent="#characterAccordion">
+                        <div class="accordion-body">
+                            <div class="row g-4">
+                                <div class="col-md-3">
+                                    <div class="card character-card h-100">
+                                        <img src="img/ookura.jpg" class="card-img-top character-img" alt="アルフレッド王">
+                                        <div class="card-body">
+                                            <h5 class="card-title fw-bold">都築敏明</h5>
+                                            <p class="text-muted small mb-2">大倉孝二</p>
+                                            <p class="card-text small"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card character-card h-100">
+                                        <img src="img/mimura.jpg" class="card-img-top character-img" alt="魔王">
+                                        <div class="card-body">
+                                            <h5 class="card-title fw-bold">箱崎祥子</h5>
+                                            <p class="text-muted small mb-2">美村里江</p>
+                                            <p class="card-text small"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card character-card h-100">
+                                        <img src="img/iida.jpg" class="card-img-top character-img" alt="賢者">
+                                        <div class="card-body">
+                                            <h5 class="card-title fw-bold">橋本</h5>
+                                            <p class="text-muted small mb-2">飯田 基祐</p>
+                                            <p class="card-text small"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card character-card h-100">
+                                        <img src="img/ozawa.jpg" class="card-img-top character-img" alt="商人">
+                                        <div class="card-body">
+                                            <h5 class="card-title fw-bold">前村義文</h5>
+                                            <p class="text-muted small mb-2">小澤 征悦</p>
+                                            <p class="card-text small"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- フッター -->
+    <footer class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-film"></i> AnimeHub</h5>
+                    <p class="text-light">あなたの好きなアニメを見つけて、共有しよう。</p>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <h6 class="fw-bold mb-3">サイト情報</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">About</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">利用規約</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">プライバシー</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <h6 class="fw-bold mb-3">サポート</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">ヘルプ</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">お問い合わせ</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h6 class="fw-bold mb-3">フォローする</h6>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="bi bi-twitter fs-4"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-instagram fs-4"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-youtube fs-4"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-discord fs-4"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-light">
+            <p class="text-center text-light mb-0">&copy; 2025 AnimeHub. All rights reserved.</p>
+        </div>
+    </footer>
+    <button id="backToTopBtn" class="btn shadow d-flex align-items-center justify-content-center">
+        <i class="bi bi-chevron-up"></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="common.js"></script>
+</body>
+
+</html>

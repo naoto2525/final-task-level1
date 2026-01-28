@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作品一覧 - CinemaList</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="base.css">
+    <link rel="icon" href="img/favicon (1).ico">
+    <style>
+        .filter-card {
+            position: sticky;
+            top: 20px;
+        }
+
+        .anime-card img {
+            height: 280px;
+            object-fit: cover;
+        }
+
+        .filter-section {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        body {
+            background-color: #1a1a1a !important;
+            /* 真っ黒に近いグレー */
+            color: #ffffff;
+            /* 全体の文字を白に */
+        }
+
+        /* 絞り込み部分 */
+        .filter-card {
+            background-color: #333333;
+            /* 濃いグレー */
+            color: #ffffff;
+            /* 文字色を白に */
+
+            /* 見やすくするための余白（任意） */
+            padding: 20px;
+
+            /* 丸みを出す */
+            border-radius: 10px;
+
+
+            .filter-section {
+                background-color: #4d4d4d;
+                /* カード(#333333)より少し明るいグレー */
+                color: #ffffff;
+                padding: 30px;
+
+
+            }
+
+
+
+
+
+
+        }
+
+
+        /* ソートボタンのデザイン上書き */
+
+        /* 1. 基本設定（未選択）：暗めのグレー */
+        .sort-btn {
+            background-color: #6c757d !important;
+            /* Bootstrapの枠線設定を塗りつぶしで上書き */
+            color: #ffffff !important;
+            /* 文字は白 */
+            border-color: #6c757d !important;
+            /* 枠線もグレー */
+        }
+
+        /* 2. マウスを乗せた時 */
+        .sort-btn:hover {
+            background-color: #5a6268 !important;
+            /* 少し暗くする */
+            border-color: #545b62 !important;
+        }
+
+        /* 3. 選択中（active）：ネイビー */
+        .sort-btn.active {
+            background-color: #001f3f !important;
+            /* ネイビー */
+            border-color: #001f3f !important;
+            color: #ffffff !important;
+            z-index: 1;
+            /* 重なり順を調整して綺麗に見せる */
+        }
+
+        /* 1. 基本設定（未選択のページ・次へボタンなど） */
+        #pagination .page-link {
+            background-color: #6c757d;
+            /* コンクリートのような濃いグレー */
+            color: #ffffff;
+            /* 文字は白 */
+            border: 1px solid #6c757d;
+            /* 枠線も同じ色 */
+            transition: all 0.3s ease;
+            /* ふんわり変化 */
+        }
+
+        /* 2. マウスを乗せた時 */
+        #pagination .page-link:hover {
+            background-color: #5a6268;
+            /* ホバー時は少し色味を変える */
+            color: #ffffff;
+            border-color: #5a6268;
+        }
+
+        /* 3. 現在のページ（選択中）：ネイビー */
+        #pagination .page-item.active .page-link {
+            background-color: #001f3f !important;
+            /* ネイビー */
+            border-color: #001f3f !important;
+            color: #ffffff !important;
+            z-index: 3;
+            /* 重なり順を一番上に */
+        }
+
+        /* 4. 無効なボタン（「...」や、押せない「前へ」） */
+        #pagination .page-item.disabled .page-link {
+            background-color: #343a40;
+            /* かなり暗いダークグレー */
+            border-color: #343a40;
+            color: #adb5bd;
+            /* 文字は薄いグレーにして「押せない感」を出す */
+        }
+
+        /* 5. クリックした瞬間の青い枠線を消す（見た目を整えるため） */
+        #pagination .page-link:focus {
+            box-shadow: none;
+        }
+
+        /* 検索ボタンのカスタムスタイル */
+        .btn-glass-search {
+            /* 画像のような濃い半透明のグレー背景 */
+            background-color: rgba(50, 55, 65, 0.8);
+            /* テキストとアイコンの色を白に */
+            color: #ffffff;
+            /* 枠線をなくす */
+            border: none;
+            /* ボタン全体を強く角丸にする (!important でBootstrapのスタイルを上書き) */
+            border-radius: 30px !important;
+            /* ボタン内の余白を調整してサイズ感を整える */
+            padding: 8px 24px;
+            /* アイコンとテキストの位置を調整 */
+            display: flex;
+            align-items: center;
+            /* 入力欄との間にわずかな隙間を作る（好みで調整してください） */
+            margin-left: 4px;
+            /* ホバー時の変化を滑らかに */
+            transition: background-color 0.3s ease;
+        }
+
+        /* ボタンホバー時のスタイル */
+        .btn-glass-search:hover {
+            /* ホバー時に背景を少し濃くする */
+            background-color: rgba(50, 55, 65, 1);
+            color: #ffffff;
+        }
+
+        /* アイコンとテキストの間隔 */
+        .btn-glass-search i {
+            margin-right: 8px;
+            font-size: 1.1em;
+            /* アイコンを少し大きく */
+        }
+
+        /* --- 以下は親要素(.glass-search)やすりガラス全体のスタイル例です --- */
+        /* ※すでに設定済みの場合は調整してください */
+
+        .glass-search {
+            /* 全体のすりガラス背景と角丸 */
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 35px;
+            padding: 4px;
+            /* 内側の余白 */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-search .form-control {
+            /* 入力欄の背景を透明にし、テキストを白にする */
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            box-shadow: none;
+            padding-left: 20px;
+        }
+
+        .glass-search .form-control::placeholder {
+            /* プレースホルダーの色 */
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+
+        .page-heading {
+            position: relative;
+            /* ここを基準にする */
+            width: 100%;
+            height: 80vh;
+            /* 画像エリアの高さ */
+            min-height: 600px;
+            overflow: hidden;
+
+            /* display: flex; などの行は削除してOKです。
+       絶対配置を使うので、flexboxの設定は不要になります。 */
+        }
+
+        /* 2. 背景スライダーの枠 */
+        .bg-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            /* 文字より後ろに配置 */
+        }
+
+        /* 3. 画像自体の設定（ここが最重要！） */
+        .bg-slider img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+
+            /* ▼ 画像の比率を保ったまま枠を埋める魔法のプロパティ ▼ */
+            object-fit: cover;
+
+            /* ▼ 画像の「上の方」を優先して表示（顔が見切れにくくなる） ▼ */
+            object-position: center top;
+
+            /* スライダー用のアニメーション設定（必要であれば） */
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        /* activeクラスがついている画像だけ表示 */
+        .bg-slider img.active {
+            opacity: 1;
+        }
+
+        /* 4. 画像を少し暗くするフィルター（文字を読みやすくするため） */
+        .bg-slider::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            /* 黒色の半透明レイヤー (0.4 = 40%の濃さ) */
+            z-index: 1;
+        }
+
+        /* 5. 文字や検索バーのコンテンツ部分 */
+        .content-layer {
+            position: absolute;
+
+            /* ▼ 前回の設定を確実にリセット */
+            top: auto !important;
+
+            /* ▼ 下から少し余裕を持たせる（見切れ防止） */
+            bottom: 100px;
+
+            left: 0;
+            width: 100%;
+
+            /* ▼ 確実に一番手前に表示させるための大きな数字 */
+            z-index: 9999;
+
+            text-align: right;
+            pointer-events: none;
+            /* ←【重要】これを追加すると、透明な枠が邪魔せず、下の画像もクリックしやすくなります */
+        }
+
+        /* 検索バーや文字はクリックできるようにする */
+        .content-layer {
+            position: absolute;
+
+            /* 上下の位置（60% = 真ん中よりちょっと下） */
+            top: 60%;
+
+            /* ▼▼▼ ここを50%に戻して、左右ど真ん中にする ▼▼▼ */
+            left: 50%;
+
+            /* ズレを補正して完璧な中央にする */
+            transform: translate(-50%, -50%);
+
+            width: 100%;
+            z-index: 9999;
+
+            /* ▼▼▼ 文字を中央揃えにする（重要） ▼▼▼ */
+            text-align: center;
+        }
+
+        /* activeクラスがついた時だけ不透明（見える状態）にする */
+        .bg-slider img.active {
+            opacity: 1;
+        }
+
+        .page-heading {
+            position: relative;
+            width: 100%;
+            height: 80vh;
+            /* さっき設定した高さ */
+            min-height: 600px;
+            overflow: hidden;
+
+            /* ▼▼▼ ここを修正（配置の設定） ▼▼▼ */
+            display: flex;
+            align-items: flex-start;
+            /* 縦の位置：上寄せにする */
+            justify-content: flex-start;
+            /* 横の位置：左寄せにする */
+
+            /* 上に隙間がないと天井にくっついてしまうので余白を入れる */
+            padding-top: 180px;
+            /* ヘッダーの高さに合わせて調整してください */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ナビゲーションバー -->
+    <<nav class="navbar navbar-dark bg-dark fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+        <i class="bi bi-film"></i> CinemaList
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">メニュー</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 text-center">
+          <li class="nav-item">
+            <a class="nav-link active" href="index.html">ホーム</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">作品一覧</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="anime-ranking.html">ランキング</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="anime-mylist.html">マイリスト</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="anime-community.html">コミュニティ</a>
+          </li>
+
+          <li class="nav-item mt-4">
+            <a href="anime-login.html" class="btn btn-light px-5">
+                <i class="bi bi-person-circle"></i> ログイン
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+    <!-- ページヘッダー -->
+    <div class="page-heading">
+
+        <div class="bg-slider">
+            <img src="img/konnfi2.webp" class="active" alt="背景1">
+            <img src="img/sudamasaki.jpg" alt="背景2">
+            <img src="img/ffantabi.webp" alt="背景3">
+            <img src="img/kaizi.webp" alt="背景4">
+        </div>
+
+        <div class="container content-layer">
+
+            <p class="lead text-white text-center mb-3">10,000以上の作品からお気に入りを見つけよう</p>
+
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="input-group input-group-lg glass-search">
+                        <input type="text" class="form-control" placeholder="作品名、俳優名で検索...">
+                        <button class="btn btn-glass-search" type="button">
+                            <i class="bi bi-search"></i> 検索
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>>
+
+    </div>
+    <div class="container">
+        <div class="row">
+
+            <!-- フィルターサイドバー -->
+            <div class="col-lg-3">
+                <div class="filter-card">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-funnel-fill"></i> 絞り込み</h5>
+
+                    <form>
+                        <!-- ジャンル -->
+                        <div class="filter-section">
+                            <h6 class="fw-bold mb-3">ジャンル</h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="genre1">
+                                <label class="form-check-label" for="genre1">
+                                    ファンタジー <span class="badge bg-secondary">234</span>
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="genre2">
+                                <label class="form-check-label" for="genre2">
+                                    恋愛 <span class="badge bg-secondary">189</span>
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="genre3">
+                                <label class="form-check-label" for="genre3">
+                                    アクション <span class="badge bg-secondary">312</span>
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="genre4">
+                                <label class="form-check-label" for="genre4">
+                                    SF <span class="badge bg-secondary">156</span>
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="genre5">
+                                <label class="form-check-label" for="genre5">
+                                    コメディ <span class="badge bg-secondary">201</span>
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="genre6">
+                                <label class="form-check-label" for="genre6">
+                                    ホラー <span class="badge bg-secondary">89</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 放送時期 -->
+                        <div class="filter-section">
+                            <h6 class="fw-bold mb-3">放送時期</h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="season" id="season1">
+                                <label class="form-check-label" for="season1">
+                                    2024年秋
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="season" id="season2">
+                                <label class="form-check-label" for="season2">
+                                    2024年夏
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="season" id="season3">
+                                <label class="form-check-label" for="season3">
+                                    2024年春
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="season" id="season4">
+                                <label class="form-check-label" for="season4">
+                                    2024年冬
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="season" id="season5">
+                                <label class="form-check-label" for="season5">
+                                    すべて
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 放送状況 -->
+                        <div class="filter-section">
+                            <h6 class="fw-bold mb-3">放送状況</h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="status1">
+                                <label class="form-check-label" for="status1">
+                                    放送中 <span class="badge bg-success">78</span>
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="status2">
+                                <label class="form-check-label" for="status2">
+                                    完結 <span class="badge bg-secondary">456</span>
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="status3">
+                                <label class="form-check-label" for="status3">
+                                    放送予定 <span class="badge bg-info">23</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 評価 -->
+                        <div class="filter-section">
+                            <h6 class="fw-bold mb-3">評価</h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="rating1">
+                                <label class="form-check-label" for="rating1">
+                                    <span class="rating-stars">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                    </span> 以上
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="rating2">
+                                <label class="form-check-label" for="rating2">
+                                    <span class="rating-stars">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star"></i>
+                                    </span> 以上
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="rating3">
+                                <label class="form-check-label" for="rating3">
+                                    <span class="rating-stars">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star"></i>
+                                        <i class="bi bi-star"></i>
+                                    </span> 以上
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="reset" class="btn btn-outline-danger w-100 mb-2">
+                            <i class="bi bi-x-circle"></i> フィルターをクリア
+                        </button>
+                </div>
+            </div>
+            </form>
+
+            <!-- 作品一覧 -->
+            <div class="col-lg-9 mt-5 mt-lg-0">
+                <!-- ツールバー -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div id="cases" class="d-none d-sm-block">
+                        <h5 class="mb-0">検索結果: <span class="fw-bold">234件</span></h5>
+                    </div>
+                    <div class="btn-group ms-auto" role="group">
+                        <button type="button" class="btn btn-outline-dark sort-btn active" data-sort="popular"
+                            title="人気順">
+                            <i class="bi bi-sort-down"></i> <span class="d-none d-sm-inline">人気順</span>
+                        </button>
+                        <button type="button" class="btn btn-outline-dark sort-btn" data-sort="rating" title="評価順">
+                            <i class="bi bi-star-fill"></i> <span class="d-none d-sm-inline">評価順</span>
+                        </button>
+                        <button type="button" class="btn btn-outline-dark sort-btn" data-sort="new" title="新着順">
+                            <i class="bi bi-calendar"></i> <span class="d-none d-sm-inline">新着順</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 作品カード -->
+                <div class="row g-4 mb-4" id="contentDisplay">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card anime-card position-relative">
+                            <img src="https://m.media-amazon.com/images/I/81DWTMi2hkL._AC_UF894,1000_QL80_.jpg"
+                                class="card-img-top" alt="異世界の勇者">
+                            <div class="card-body bg-dark">
+                                <div class="d-flex gap-2 mb-2">
+                                    <span class="badge bg-primary">ファンタジー</span>
+                                    <span class="badge bg-success">放送中</span>
+                                </div>
+                                <h5 class="card-title fw-bold card-title-nowrap text-white">ハリーポッターと<br>賢者の石</h5>
+                                <p class="card-text text-white small text-clamp-3">
+                                    孤児の少年ハリー・ポッターのもとに、ホグワーツ魔法魔術学校への入学を許可する手紙が舞い込む。彼の両親は有名な魔法使いで、彼もその血を受け継いでいたことが判明。ハリーは無事入学し友達もできるが、やがて学校に隠された驚くべき秘密に気づく。
+                                </p>
+                                
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="rating-stars small">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                        <span class="text-dark ms-1">4.5</span>
+                                    </div>
+                                    <small class="text-muted">1,234件</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card anime-card">
+                            <img src="https://ogre.natalie.mu/media/ex/film/139679/flyer_1.jpg?imwidth=640&imdensity=1"
+                                class="card-img-top" alt="桜色の約束">
+                            <div class="card-body bg-dark">
+                                <div class="d-flex gap-2 mb-2">
+                                    <span class="badge bg-danger">ファンタジー</span>
+                                    <span class="badge bg-success">放送中</span>
+                                </div>
+                                <h5 class="card-title fw-bold card-title-nowrap text-white">ハリーポッターと<br>秘密の部屋</h5>
+                                <p class="card-text text-white small text-clamp-3">
+                                    夏休みを人間界のダーズリー家で過ごすハリーのもとに「屋敷しもべ妖精」が現れ、ハリーにホグワーツへ戻らないように警告する。しかしハリーは学校に戻り、新学期を迎えて2年生になる。そして楽しい学生生活を送る中、秘密の部屋にまつわる文字が壁に現れる。
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="rating-stars small">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                        <span class="text-dark ms-1">4.8</span>
+                                    </div>
+                                    <small class="text-muted">2,156件</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card anime-card">
+                            <img src="https://m.media-amazon.com/images/I/81aQvJm5aCL._AC_UF894,1000_QL80_.jpg"
+                                class="card-img-top" alt="量子戦士">
+                            <div class="card-body bg-dark">
+                                <div class="d-flex gap-2 mb-2">
+                                    <span class="badge bg-info">SF</span>
+                                    <span class="badge bg-success">放送中</span>
+                                </div>
+                                <h5 class="card-title fw-bold card-title-nowrap text-white">ハリーポッターと<br>炎のゴブレット</h5>
+                                <p class="card-text text-white small text-clamp-3">
+                                    伝説の三大魔法学校対抗試合が再開される。立候補した生徒の中から「炎のゴブレット」が各校から代表1名を選出するのだが、参加資格のなかったハリーも何故か選ばれてしまう。そして、4人の選手はさまざまな課題に挑んでいく。
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="rating-stars small">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star"></i>
+                                        <span class="text-dark ms-1">4.2</span>
+                                    </div>
+                                    <small class="text-muted">987件</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card anime-card">
+                            <img src="https://m.media-amazon.com/images/I/7180zzG9lrL._AC_UF894,1000_QL80_.jpg"
+                                class="card-img-top" alt="魔法学園">
+                            <div class="card-body bg-dark">
+                                <div class="d-flex gap-2 mb-2">
+                                    <span class="badge bg-primary">ファンタジー</span>
+                                    <span class="badge bg-success">放送中</span>
+                                </div>
+                                <h5 class="card-title fw-bold card-title-nowrap text-white">ハリーポッターと不死鳥の騎士団</h5>
+                                <p class="card-text text-white small text-clamp-3">
+                                    ホグワーツ魔法学校の5年生に進級したハリーは、ヴォルデモート卿の復活に深い懸念を示していた。そんな中、魔法省は防衛術を教える女教師を学校全体の監視役として送り込んでくる。一方、ヴォルデモートは仲間を集め、ハリーたちを陥れようと暗躍し始めていた。
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="rating-stars small">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                        <span class="text-dark ms-1">4.6</span>
+                                    </div>
+                                    <small class="text-muted">2,345件</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card anime-card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR447hB7wZQVB0Rvb7XbGRyfoWP5u45f4IQ9A&s"
+                                class="card-img-top" alt="竜騎士">
+                            <div class="card-body bg-dark">
+                                <div class="d-flex gap-2 mb-2">
+                                    <span class="badge bg-primary">スポーツ</span>
+                                    <span class="badge bg-warning text-dark">人気</span>
+                                </div>
+                                <h5 class="card-title fw-bold card-title-nowrap text-white">ひゃくえむ</h5>
+                                <p class="card-text text-white small text-clamp-3">
+                                    生まれつき足が速い才能を持つトガシと、現実から逃れるように走る転校生・小宮の出会いから始まる物語で、100m走を通してライバルであり親友となった二人が、成長と共に勝利のプレッシャーや、走ることの意味、人生の苦悩に直面していく姿を描く陸上競技（100m走）がテーマのアニメ映画（原作：魚豊）です。トガシは小宮に走り方を教え、小宮は走りにのめり込み記録を更新。数年後、トップランナーとなったトガシの前に、成長した小宮がライバルとして現れるところで物語はクライマックスを迎えます。
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="rating-stars small">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                        <span class="text-dark ms-1">4.7</span>
+                                    </div>
+                                    <small class="text-muted">2,890件</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card anime-card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuGZ6PMHALnsup53iufDhHA8XbEAFeo4Brxw&s"
+                                class="card-img-top" alt="都市伝説">
+                            <div class="card-body bg-dark">
+                                <div class="d-flex gap-2 mb-2">
+                                    <span class="badge bg-dark">コメディ</span>
+                                    <span class="badge bg-success">放送中</span>
+                                </div>
+                                <h5 class="card-title fw-bold card-title-nowrap text-white">テルマエ・ロマエ</h5>
+                                <p class="card-text text-white small text-clamp-3">
+                                    古代ローマの浴場設計技師ルシウスが現代日本にタイムスリップし、日本の入浴文化や衛生用品（フルーツ牛乳、シャンプーハットなど）を古代ローマに持ち帰り、浴場に革新をもたらすという、異文化交流と「お風呂」を巡るコメディです。主要なテーマは「風呂を通じた文化交流」「伝統と革新の融合」「「平たい顔族」（日本人）のユニークな発想」であり、音楽もクラシックオペラと現代日本の要素が融合しています。
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="rating-stars small">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star"></i>
+                                        <span class="text-dark ms-1">4.3</span>
+                                    </div>
+                                    <small class="text-muted">1,567件</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card anime-card">
+                            <img src="data:image/jpeg;base64,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"
+                                class="card-img-top" alt="未来探偵">
+                            <div class="card-body bg-dark">
+                                <div class="d-flex gap-2 mb-2">
+                                    <span class="badge bg-info">アドベンチャー</span>
+                                    <span class="badge bg-success">放送中</span>
+                                </div>
+                                <h5 class="card-title fw-bold card-title-nowrap text-white">マインクラフト<br>ザ・ムービー</h5>
+                                <p class="card-text text-white small text-clamp-3">
+                                    近未来都市を舞台に、若き探偵ネオが最新テクノロジーと鋭い推理力で複雑な事件に挑む。陰謀が渦巻く世界で真実を追い続ける、スタイリッシュなSFミステリーアクション。</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="rating-stars small">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star"></i>
+                                        <span class="text-dark ms-1">4.4</span>
+                                    </div>
+                                    <small class="text-muted">1,987件</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card anime-card">
+                            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxISEhUQEBIVFQ8QEBUVDxUVFRUQFQ8VFhUWFhYVFxYYHSggGBolGxUVITEhJSkrLi4uFyA4ODMsNygtLisBCgoKDg0OFxAQGi0dHR8tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLf/AABEIARMAtwMBEQACEQEDEQH/xAAcAAABBQEBAQAAAAAAAAAAAAAEAAIDBQYBBwj/xABOEAABAwIDBAcCCAkLAwUBAAABAAIDBBEFEiEGMUFRBxMiYXGBkTJSFyNCk6Gx0dMUM1OCkqOywfA0Q2JkcnSi0uHi4yRjcxY1g8LxFf/EABoBAAMBAQEBAAAAAAAAAAAAAAABAgMEBQb/xAA0EQACAgECAwUHAwQDAQAAAAAAAQIRAwQSITFRBRNBodEUFTJSYXHhFiKBNFNjsUKRwfD/2gAMAwEAAhEDEQA/APDUAJACQAkAJACQAkAJACQAkAJACQAkAJACQAkAJACQAkAJACQAkAJAG5XEfebY9DtkBtXQVkBtj0OhqA2x6EgYgnbHoPDEC2x6DwxMW2PQkbGgTUehPHB3IIe3oFR03cmZtx6BLKXuTIbXQlFN3IJtdBGm7kBa6ET6buQUmugPJTdyRaroCyQdyRotvQHfCgtJdCB7Eiko9CJzUFbY9BpCB7Y9DlkBtXQ4gNq6CQG2PQflSGLKgBwamKx7WIFZIGIFZIGoFZKyNMlsLhpk6MpTLGCkToxlMMjpU6M3MnbTpkOZJ+DoonecNOge4jfToopSBpKZItSBJaZI0UgGaBI1jICljSNUwZ7Ei0yEtQVY0tSGLKgBZUAS5UyRBqAse1iBWSNagVkrWJk2TxQoIcg6ClToylMsqemVJGMpFth2Gvldkjbc8eAaOZPAKkrObLmjBXJmuodm4YxeX4x/LVrB5DU+fot44up5WXXTl8PAtomMZoyNjfBoC02I5JZZPmyQyp7URuYPPSRP9uNh78oB9RqpcEzSOaceTKmu2XY7WF2U+67Vp8DvH0rOWLodmLXNfGjL1tA+N2SRpa4c+I5g8QsWqPSx5YzVxYBLAkbKQDUU6RrGRV1EKk3jIBkjSNkwdzEikyMtQVZzKgdisgLCMiCLOhiAsc1iYrJWRoJbCYoUyHIPp6dMxlIsYIEzGUixo6UvcGNHacbD7T3cVSVujDJkUYuTNtRwshZ1bPzncXnmfs4LsjBRR8/mzSyytkhnVGR0TJAPbImBI1yQx4cgBVVJHOzq5B/ZPFh5grOcbNsWWWOVowWKUDoZDG/eNQeDmnc4Lnao9vFlWSKkitmjUm6ZWVMCTRvGRWzQqTeMgOSNI0TIHMSLsjLUDFlQAcI0zKx7YkC3D2woFuJo4UyHINggTM3IsIIVRjKQbHEmZNl9s/EG5pTwGVvidXfRb1W+GPGzzNfl4KCLB8y6TyjgekMmYUhhLAkMlCAHhAD2lAAO01GJYC8fjIe0O9vyh6a+SxyROzSZds6fJmGc1YHspgk8Sk0iytqIUqN4yK+WJI2UgSSNI0TIXNQVY3KkMtmRKjmbJmwpkuRI2FAtwRFAnRDkHQwJmUpBsUSZk2ENYmRZb0jrRAcyT9Nv3LqxL9p4usd5WIvWpyk0RQAXEkMMjCkomAQArIA4gCSJw3HcdD4HRJq0NOmeevjsSORI9NFxn0SdqyGSNIpMBniSNYyK+aJI2UgKWJI1UgWSNI0TISxBVl+yNUcjZM2JMhsmjhQS5BcMCZm5BsUKZk5BDI0yGy7o8GAGefTkwaE/2jw8FrDFfM4M+srhAHq3jMbAADcBoAF1JUea5Nu2DhyZIVC5IYZE5IYbE5IYQCgZxxQBG56BDGSaoEY+cXe483u+srifM+hh8KInMSKsHmiQaKRXzwqTaMgCWJI1UgWSJI0UgZ8SC0y/YxUcjYQyNMhsKihTM3INihTMnIKhhJIa0XJNgBxTIlJJWzR0FA2EZnWMv0M8O/vW8MfU8rPqXPguRFWTkreqOMpXvuSmAxAE0T0gC43oGFRypDJ2zIA46ZAETpUAMZNqPFMLA8VwfIOti1iPtDeY/HmO9cc4Uz1tPqVNbXzKvIoOuxj40DTA54UqNIyK6aFSbxkByRJGiYO+JBaZeRxKjlbC4YUzNyDIokzJyLGjoHyeyNBvcdAPNUotnPkzRhzLyjpGxDTV53u5dw5BdEMdHm5s7ycPA5K48VscxX1JSApKh5a7Nw4+CYE176jdwQB5P0qYnWQ1bMk0scBiaYere6MEjR9y0i7g70BbzWM27NYJUbro52gkrKQSTazMe6N5Fh1mUAh9hu0dbxBVwdomSpmsbKqJJRMgDB7ddJYopfwaCMSzgAyFxIZHcXDbDVzrWPC1xv1tEpVwKjGzS7O4waqmiqSwsMrMxbe+XUjQ8QbXHcQqi7ViaplrALnwVCL6kfpY7jvHNRJWVF0UmM4X1Zzs/FOP6B5eHJcso0erp8+9U+ZWFig6LIZIkFpgM8CRrGQBLAkaqQK+FI0Ui+jhVHI5BcUSZm5Fzh+F3s+TRvBu4u8eQWsMd8zhz6nbwjzLbNpYCzRuA0AXQlR57k27Y2Td6fWmSROTEDyRXSAqq2lTsCrY8xmxBLPpb4d3cmImqaSKdmV7GSRk3s9rZG3HGzgRdJpPmMYMMhAa3qY8rBZlmNGQcm2HZ8kUgseMOZ8l0zfCeYj0c4geiKCx4oh+UmP/AMjh+zYooLM3iHR1Rz1H4RJ1xLrF7OtLmyEC2rnXfuA3O8LKHBWVvNjSUoADI2gNaA1oAs1gAsAANwAG5WiS1gp8oQAQx9khhQc17Sx+rSLH+OaiUbLhNxdoo67C3R9oHMzmBa3iOC55Ro9LFqIz4cmAFik6LIZIkFKQFNTqaNFIBkgQaqReMiVHK2XWG0AFpHjva0/WVtCHizg1Go/4xDXyXWxwHWBMB8o7J/jipsqgeydkncqYEb4wUAA1GHBydiorn4U5puwkHu4+I3FMR1olHtMB7xp9CQyRtz/Nv9B9qAJ2QPO5lvEgfVdABUVAflHyGiADY2BugCBjnJAMSAkYUwCopeB3KWhp0AV+FX7cXm3/AC/YsJQ6Hdh1PhIp3MWZ2WQyRIKTA5YEjRSNBh1IPbd7I9ke8fsW0IXxZ52oz7VtXMMklutzzxMamAQxqllI7OOyf44qSiBqok7ZOxHCEAcsgBZExUc6oICjojCLChwalY6OONkWA1ovqUAOcEhkQKZJNEgZKWoEPiksk0MjrqASdpuknHk/x7+9YygdOHO48HyKJ8dtCLEb+5ZnenfFEL40iky6kk4DcNy7EjxW23Y1gTEFRtSY0iZoUNloiqn9k+X1hJcxvkQR7lRJIEAcKYhIA6iwoSYgHFcUZThpk0D3WB5WF1MpUXGNhUE7XtD2EOaRoRqCmnZLVDag6FAh1vMcEDGkcvMXvf1QA1x1+tAE8B1QIJIQMjcExEkUiTQEdfRiQZm/jAP0+7xWUonThzbeD5FE5qyO+w1uq7DxgqJqTBBUbVLZaOvNlBQBWP0t3pxEzkZVCJ2oARQBxAFPtLiLI4j/ANQIZPkO33PK3G/dqpkyorjyPLKvbqsF2Nnc/fq2zdBvN8oKy3Pqb7Y9DOVW1U8hyPe8gm+pzgu4XBAsjiCaRa4FtLLA9ro5LEHttuSxw45h/H7i06E0pGv2H2ubJLUmolDY3HMwuNhe5/d+5VCXUiceHA3lHWMc28bmyR8HMIdl7tFpzMuRP1w4AnysmIYO/egCQutqgQRDNdAyQpiGlAiaGRJoYPidDn7bB2vlAfK7/FYyideHLXCQNE1dBxhcTVLKQQFDLQPUPslzAqJaoFwHeU5yUFbKx45ZXUQqldcXCadq0Q006YYAmIa5AGE2n28MLjDBCet1GaTQN77C+bXvUSnRpGFnkWJYnNUSuMkhfISe1ewHc0X0WZqvoMhkyEXJJc0ak3IO+1/43FIZX1EgE2gu3fYcO4/xyVEPmKWRgcdLxu3cCN3+qQw6gkbHI2xvE8Am9nDzB5H9yBo9a2L2jdnFPJlykdhwAZ4aDTu8xwVwkRkj4m7K1MBAIAbJuI7kACUFVeybEW8L7pDJHBAiO9kxBMMilopAMTVTJQXGFDNEh7lJRS47V9XFJJ7kbnctwumuCsVW0jH4JLK17WS6uyEl3B2o17iuLNlWSC6o9bTad4skujRrcMk0txDjf1uPoIXXiacFR5uoTWWVlmHKzIodpdpYaaNznPaX2OVgILnHw4DvQ3QKLZ4TieJPlvK43klfYDdvvYDkByWD4s6OSKWAZJHDhoDz5g+KYlzJqmbS+/iCPq+v1KAAszg8P4uF/psgXiT1eUndYnW3A/YUDZPTMuzMLdki19AbkAjuKALrB67I5rr+wbi+8Bp3X8Lj0QM9+oJQ+NjwbhzAQeY4Fbo5nzCQmIZIEAZyjns9zeTiP48iFRJpKN6koOCBkb2oJGsdZAHYmpMaCWhQWckKBmW2sk+Ktwc9oPhe/wC5LLwxs10qTzRA8NbfXuXleJ7zf7QmhqbueRuzWHkLfXdepgjWNHg6ualldeBaiQlanOeb9KlExsXW6mSR+XgGtABJsANSeZuomaY3Z5Ox5ztHBmo8QNVmaHHuIkDjufa/iBY/UgPEhLO0RewLiR6oEh8w0F/aZoRzBQNhDSHFtxrmGvIn7dEhnJDkLgDoRqODgdfVMRKyqDbO4O//AA3SGe/9Hzi6hhJJOhAvrlsSC31BW0ORhPmaMhWSDVc4Y3M7dcDzJsPpKmUlFNsqEHOSivEyNdJ1dU0cJRfzGo+s+iePIprgGXDLG6ZqsPkTZmi2YkUdcExEDggRLGkykTtUlDJQhAzLbVQl0TrbwQR4jcqcdyaCE9klLoYar2wMPxTGZpCO3rbLfgLA3P8AGq54aLxmz0smu4VBGgwCsD2tcLi43HeDxB77rraPKfPiaWF6kZl+knDzLRuc3V0DhLbm0Ah3+Ek+SiStFQdM8QEe/wDOt56hZGwXSYTNKzO0MycNTmu3QndZQ5pG0MMpK0V07HN33BB18R4qrMmmjkY6x1uNr/VdDBcWa7amhY2kgkbYyRPZG19spljdG6VuYc2ltvMrDHJuTR26jGowTRl32+WPaJB8/sXQcI2GDMervo42ae87igD33owwyanpOqnaR28zNb3BA4cPqOm7VaxVIxm7ZsCrJAcYHxEh5MJHcRqD6gLPJ8D+xphbWSNdTKY5SPdlnB0haCB+dd30fUVwafJtaX1PX1WFSUn9PyX2Fy6BeozwkX8LtFJRIUxEb0CHRpMpEwKkZxyYFHj1KXscG6OscvjZUmSeFzQTwPl61pbLpZ3MEnMWnyA8yrs0CcEx+SF4LiXRneOI7xdU0Jqz1DBMWZM0OjcHNPLgeRHArNoguXAOBBFwRYg7iDvSGeQ1mxbmVU9O0Hq8ompXHUAEkGNxH5w/NBWajxovfwsl2dwiaMmIjK10xzXOoZlubW4k2HmSFzaiKirZ6Gik5vajRYxsVDURucBllI3jiQuaGRo7MuGMjy6swqSGYRFhEoceHtDdcf4fVdakmrPNljcZUHbVYw2Z0dPECIYfbJFs8uXKdODWgWHiVOKFW2a6nLuaiuSM5K++nJxsOf8AGq1OUvtlMLkqJgI2Zyw5sujc2UhxaPK6aQm6Po+kZZjRYizQLHeLDitjAlcEwA6+LOx8fvsLfC4tdJq1Q4y2tPoUGHyCWLK7fYteOR3ELyHFxlR9ApKcU+ozAZrtbzAsfLRezzSZ841TaNVTHRSUEoAY5MR1hQMkBSGdQBBPFdIRjNtdmDVR/FkNlabtvufbe0nhfn4K0wXA8srsKmh0likZbeSwhv6XsnyK0TRViwesfTyCWN+UEjOD2g9vItvr3fWm0D4nqOD7X0ktml+R54PBZ/i9n6Vm4NE0y/laPoUiMli0hbKA0G5vrbs2HMrh1W5v6HrdnuEY2viZbYTVZ2gnQ8eK4+R6MuJDjFFE4tkc0Z4ySw8rj+PRCk1wI2J8WeObX0AgmJAtG65HeTvXbilaPN1OPbIqKSike4BjHuLiA2wNjra9/NbbX0OW0j3bYHZsUkQLrGd1y4+7e3ZHoPpWsY0jGUrZtYyqEdcgAWU+gQI8dqtpJ4KiRzLiEyHh2XG+657kpYIS+JHTjz5IJJPgbHZR5LQTx19dVdUkjlbuTZt6XcoZSCUhjHJkjWJjJmoAeEhnbIAjfCCgCB9KECoqMR2VpJ7mWnYXH5QGR/6bbO+lO2BmMU6MInNP4NO+JxHZzfGtae7c4eNynvY7DqKkr4I2RPhbOI2hpkZM0OcBoCRIG62RwChmJ00j2m8T2m2oIuR5tJHoVMopqhwk4SUl4FdQ4k2IHO4NtvubWXmTxS3baPdhni47r4FRtBtczdHrbidAfLefoW+LRPnPgc+TXRXCCsxuI4s6YgyAOsbi4Fge4AfvXZDFCHJHDPNOfxMhbX20vbw0WyZiel7MbYAQgyAu6uwkse1bg4cwhxslo9EoKlksbZYzdj2gtPd9qyaoRI8oAy+3GLGmpXvYLyv7EQ/pO4+AFz5JoFxPGKWVxNiT1khtzz5jax5jVaFnr+zlNlaB3KZGKNdTjRZMsIQMa5MRGxNCJmoGStSGPASA7ZIBFqdgNLEAMdEgBhjTAidEgRT4pgFPMQ6WFjyNxc0Ejz3ppgCt2Ow/jSwnxjafrRbAc/YvDyP5NCPBgb9IStjPG9u8Ejpa10MIPVvjbIwEl2TMXNLQTra7CdeatFJ2gbCagxkcjcHvBWsRM9f6O8SjdTiAPBkic7M3i0OcXNPhYrOfMk08rlAjy3pGx6Nz2wAglt950bm0J8bfRfmqjRSRTbI4R10onLfio9Iv6btxd4DcPNVfEUn4HrOF09gFm2SkXUbVBZJZADXJgQMKoknaUAStKQx4ckMcCgDt0gFdACKAOWTAa5iAIJWJiK+oY8ez9OiYiNzZSLWbfxP2IAw20HR/U1U76h08YLgGsGRxyMbuG/XUk+apOik6Mpj2w9XRRuqHZJYmC73MuCwc3NO5vMgmypSHdlLRzPjlcWOIc2RwuDvFyLFUhlmcZqR2mzSMsbgB7sp4EFl7EHlZDSJoCwrZ91dUGV1+pzXkf+VPFrT5bxuGgWW3iDlR6/g+GBgDQAGtAAAFgANwTbM0jSU0Nlmy0FAJDOpgMegAKN6okIa9AEjXIAeHoAd1iVDsQegBwegY4OSA6CgBszA4FpvY77EtPqNQlRUW07RmGVJMjhTsmYG5Mry7rYH5gSBJGXlzGn3mgEcd1llfHgehsWxb2nf8P+OAJhO0LQTLM+RzZh1jRZrWQtIztYLu1IbYaWuddbixGdcWXm0e5bYJLb5/UsRtZTanJJkaCXvAaWt+NMTQdb5iR7Nri/NV3pj7uycOr9LLmlqmSMbI0EB4uAbXHoSPQkLRO1ZxZIbJOL8Co2mr4o6eV0pAjMbmkH5eYFoYBxJJAA71RHieL0OzlbK5z200li9xBcBFfU6jrC2471puKtFlTbEVckgNUzJC35LXtcX+JaTYJXZLl0PRMJwlsbQ1rQGtFgALABJslI0VNT2UMqgtrUhjkANKAInlAFYx6okna9AGardvYIpHxOimLonuY4gR2JaSCRd97aLF5knR7OHsTLlhGakuKvx9CA9JVMN8M48ovvEvaEa+4M/zR8/QTekylO6Kf9V94jv0HuDN80fP0O/CZTfkp/SL7xHfxD3Bn+aPn6Dm9JdNwhn9IvvEd/EPcGb5o+fodPSdTDfDP6RfeI7+Ie4M/wA0fP0OjpSpfyU/6r7xHfx6B7gz/NHz9BfCnSfkp/1P3iO/iHuDP80fP0AZtu8Me5z30kpMlutv1WWSwsM7esyu05hQ8kH4G8eydXFJLIuHLnw8iWfpBon6imkLhexLIDa4sdc+lwAD3BV30Ohn7k1Pzr/t+gJPtjRSBplppC/M0zERwu61rSXiMkvuWZ7OseW7VTLJB+Bpi7J1WNOprxri+F+PLoWPwi0n5Got4RfeKu/iYPsHO/8AlHz9BrukGj3/AIPPcbjlh0/xp9/EXuDN80fP0In9I1Ju6qYfNfeI7+I/cGb5o+foNPSLSbuqm/VfeI79B7gz/NHz9CRvSNSN3xT+kX3iO/Qe4M3zR8/Qnb0o0Y/mp/1P3iXfIfuHP80fP0Ht6UaQ7oZ/1X3iO/iHuHP80fP0CKDpDp5pY4Wwzh0sjWNJEdgXEAE2eTbVCzRboyy9i5scJTclwV+Poa1xWx45C4piKRkiZIQ16BnkO0H8qqP7xL+2V58/iZ99ov6bH9l/o9P6LcCZHS/hUjG9bOS5rnAEsiGjQCdwNi7zHJa440rPnu2NVKebu4vhH/ZoquipcQpiG5JIZmnq5GWdlOoD2HmCPoV0pI87Hmy6fInbTR59SYxT0lNBQ1BLaqkr81SBFI4BjZ3vzBwbZwLXNIF7kELLckqfgezkw5tRllmxr9so8OP0r/ZntrKxlZXSPpA6RsgjEYax4c6zGtNmEX3g8FEnb4Ho6CEtPp6zft4vmzf9HGxz6bNU1QAmkZkZHo7qmkgkuO7MSG6Ddbv01hCuLPH7U7RjnrHi5Lx6nNtNoIKeuo4326uB0k1TlbmLc0T4ohlG++Z5t4FOTSaMtFpcubDkceL4Jf8AfEJ+EXDOb/mH/wCVHeRF7r1nTzCcN24w+eVkMZd1krsrLwvaCeVyNEKcW6M8vZ+qxwc5LgvqC9KuGROoXT5AJYXx9W4AA2fI1jmk8QQ7dzARkSo17JzzjqIxvhLmeNrnPrzhNt6ACsLw6Wpf1VOwvkPLc0XAzOPAC41TSbdGOfUY8Ed83SPdaiSlw6laZA1kMQYy4ZmLnGwGgBLiTqfMrp4RR8Unm1OX9ttyOYBj9JW5xT9rqsvWZonR+1e3tAX9kojJS5D1Gnz6eu84X9TLUOO0OHVVdBKCxpqWOja2JzwA6CNxtlGgzOdos01Fuzvlp9TqsWKceNJrn9SyHSJhnN/zD/8AKq7yJi+zNYldea9S42twyGaknD2NOWF72GwuxzWktc08DcKpJNHLps+THli4vxPEtmT/ANXTf3mL9sLnh8SPstb/AE+T7M9wc5d58CRuKAMtTz8/3fuVkh0cqQzz2PBpK3EJaePTNPK6R1wOrjElnO7yMwsOZHeuBxubR9rDUx0+ihkl0Vfej07b/EG0eHujj7LpGingA0yhwsSPBgcfILWbqJ85ocT1GpW7rbMz0QY3lc+hedHXkp+4j8YweVnAdzlGKXgep25puWaP2f8A5/8AfY70w4FYNr4xwEdRb9W/17J8W8k8kfEnsPVVJ4ZePFf+m2ovwOiijHxMHWhgaOzG6VzraAb3kk96tUkePkllzTbbcq/k7tlXyU9FPNCcsrGDIbB2UlwF7HQ7+KJOkGkxxyZoQlybPAp5nPc6SRxfI92Z7nG7nnmSuV8T7nHjjjiowVJGj2Q2SFe1+WpbHJERmjMRecp9l4IeLjeN2lvBXGG7xODXdoPSyScLT8b/AAafZvo7ngrGyySMMFO8OY4Ah0xy6dnXIATrcnd33VxxtM83V9sQy6dwjF3Ln9PUtulfFYmUopnHNJUSRnIDZ3VxyNe93cOzlvzcFWR0ji7KwznnUo+F8f44GBx7EMMfNG6npJRE1retDZG04dY3IyFjsxtoXZm358VlKUb4I9rTYteoSU5q/C+JZ4bW08mLUzsMhdHFlDZW5cgeLOMhyXNgG5deLmjuJpNOSowy480dFk9pdvw4mi2sx6KgxJkxjL3PoCx7WFrSLzXYTf8AsvVykoys8/R6XJqtPKEXVST4/YxG1m082JSsaIy2NhtBC28jnPOmY2HadbQADQE77krKUt3A9rQ6CGji5zfHr4JHovRzs2+ihkkqCGyz5S5twRC1gNgTuLu0SeH1rXHHauJ4famtjqciUOUfM8x2pqRVYhO+nvI2aZrYcoLjLljYy7QN4JYSDy1WMuMuB9B2fHudJHvOFcXf3N7sX0eNiy1FaA6YWcyLRzIjwL+D3DluHfoVrDHXFnj9odrvJePDwj18X6II6VcclggFPGwhtWHMkm4NbbtRt453C+p4Xtc7nklSOfsrSxzZbk/h411PMdm/5XT/AN5i/bCxh8SPp9b/AE+T7M9rLl3nwIxzkCPPaSsv48VYNFpBVoJM3g2PtosQmqXRukB65ga0hpu6Rpvc8OyfVcDltm2fZS0stTocUIuuT8gXa7aiSvka97RHFECIow4utmtmc42F3Gw4aW8VM57jfs/s9aVNt3JlTh9a+CVk8f4yJ4e3vI4HuIuD3EqE6dnbmxRy45QlyZ9ARuhrqW9s0FVDqONnDUdzgfQhdfBo+Fkp6fLXJxf+jw+egkhxBsU5Lpo6qJpe4lxkb1jS11zrYtINuF7cFzU1Kj6/FPHk0kp40lcXy60ewdIn/t1T/wCMfttXRP4WfLdn/wBTj+54QuU+4LLZzGX0dQyoZchukjR/ORn2m+OgI7wFUZU7ObWaZajE4Pn4fc91r5pJqV0lDI0SyRZqd5Ac03FxodNRpruvuNrLpfFcD4mMVDLtyrgnxPn2skkdI905e6YuIlMhJfmBsQb7rbrcFyu74n3OCGOEF3SqP0NpslsA2sp2VLqhzA9zwWhgJGR7me0T/RvuWkcdqzy9b2tLT5XjUbquJqW//wA3BWOIdmqXN3XEk8vIWGjG346BX+2B5Mp6rtCaVcPJHlWN4rJVTvqJbZ5Do0atjaNGsHcBx4kk8VhJ27Pp9Jpo6fEoL+T07Y0YbSUba/MA5zS2WSTtSNf8qJjR3jQNFyLHVbQ2pWfOdoT1WbO8L/hLl9zIbZbcS1t4YwYqTi35c4/7hGgb/QHmTuETyXwPS0HZMcVTy8ZeSLbozq6Wmp6isqS1rmSiNryLvILA7q2DeSTwG+3cqx0k2zDtmOXJlhihbtcv5KzH+kKqnla6AmCGJ4dGzQulIOnXEbx/QGmu86ETLI2+BtpexscYPveLfkejsdBi9Bro2VtjxdTyt/e0+oPIrXhJHhyWTQ6j6rzX5PIsOoZKfEIoJhaSKrja7ke20hw5gggjuKxiqmkfUZs0c2jnOPJxZ66XrvPhiNz0AedPoy03Ybdx1H+iuhWdjnI36JAV02EB73P622dxdbJe1zffmXNLT227PoMHbndY4w2XSrmcGzw/Lfq/9yXs31Nf1B/j8/wSN2aH5f8AV/70ezfUP1D/AI/P8BMOByNGVlbK1o3NbnY0XNzoJLb0ezvqZS7ZxSdywpv+PQZJs45zs7qtzni1nOa5zhbUWcZLiyPZ31Kj27CK2xxUvv8AgklwaVwLX10rmne1xkcD4gyWKfs76kR7YwxdrCk/49AR2zY/L/q/96Xs31Nv1D/j8wWqwhrBczX/ADLf/ZHs31D9Q/4/MuKHZ2d0YMVbIBa7WNMjGi+umWSw38kezvqYy7ZwydvCm/49CtmwNzXH8Jlewk6vcwyhx5l+e/qj2b6mke3oxVRx0vv+CypNnszcseIuDODWh4brqeyJbI9nfUiXbWKT3Swpv+PQfHsI3hVDU3PxG88/xiPZvqart+KVLH5/gmHR9/Wh8z/yJez/AFH+oF/b8/wd+Dz+t7rkfE7ibAn8bv0HoEez/UXv+N33fH7/AIO/B5/Wx8x/yI9n+o/1Av7fn+Dh6PP61uvb4nde1/5zuHoEez/UXv8Ajd935/gXwe/1r9T/AMiPZ/qP9QL+35/gfFsLIzRlc9oJucrHMBPM5ZdU/Z31M59t458ZYU/vXoTUexjmTRzvqzIY5GO7UZJdlN8uYyGyawU7szydswliljjj22uv4NaZFueERulQBnGsBVkEn4A1yBg8uC+6Uhg7sJlG4oAjNFMOCAI3Ryj5KBjC+TkUAMMknuoAY5sp7kABzUBOrtfHVADDj5oQ0uzGMusbalg524juQFWa/CdqoKhoN2vaeOh9eR7kvsLkHvwyjlB+KYHHc5vZIPPRHEAKAmM5L+ySPRUIsY6pTQ7J21CKAeJ0DHdakAutTENdMgZG6oCKEQSVadBYHPXgbyihWDwFUIPhKkYWxIZO1iAOmEJDGOpRyTAjdRt5BFgDyUQ5IsQJPTdyAK2ogTGY7bKnzBrbt017Tmsvf+0RyTKiZ2iw82BjmZFK0aHrBr2ibdm9xr4I2jL2n2iqaYASPbJ/ZDgfW2U/QhponamH0m2cUh1eGvO9r+wb+eh8iluQtpeQYvfimKg6LExzQIIbX96AJBXd6VAI1/emBC+v70ADur9bbydwGpPkgCSGKV5A9gHidT+j9tkpOlZcIbpJB7KZkeo1d7x1P+nkuWWRs9XFp4x5FdTP4LqhLdGzzNRi7qbiWcDkzINickMLYUgJAkMVkAcIQA0tQAPNEgCnrYkwPNtt87pgxrXENYNbGxJJ4plRKCGjeQSbNt7zmtv3alPcl4lhcUBHtSMA8XP/AGAVLzQ6hsfQbJSRSaZ2Eg2N2SMt5uaAl3uN+IbWNdhskQzRF7WjjE/Mz0BLSqUU+QjQ7Lx1ErXF0mYNdYHKAd19bWS4ohpGijw+Xn9CdiCGYbKflD0P2osCdmEPO9/o3/VAgiLBmfKLneJt9VkAFthawWa0DwFr+PNAiSmG88tFlmlwo7NHC25AlbMuVnrwieLN2+rR8pnzYXRF7eR42XLLLW4nb0kV43Oj+bCrezHaiRvSfiI+VH821Lew2okHSpiXvRfNNRvY9qHfCviXvxfNNRuYbUL4WMS9+L5pqNzCkL4WMS9+L5pqNzCkL4WMS9+L5pqNzCkNPStiXvRfNNRuYUiGTpLxB290fzYRuYbUUeL4/LUnNM2Mv94MDXWHC43hJuxrgRQ4zI3cGfogrN40y1kkgp20859zdb2Al3USu9kNdtJMTciO4/7YR3URd7I5/wCpJwbtyNdzawNPnzHcdFUYKPITm3zD8P25q4A4RdUA9+YjqwdbAachotN7M6DB0m4h70XzTUb2G1HfhPxD3ovmmo3sNqF8J+Ie9F801G9i2oXwnYh70XzTUb2G1DHdJeIH5UfzYRvYbUdb0mYgBYOjt/4wpfF2zaGWUFSIZOkKudvdH82FO1Gq1eVeJk1RzCQAkAJACQAkAJACQAkAJACQAkAJACQAkAJACQAkAJACQAkAJACQB//Z"
+                                class="card-img-top" alt="音楽少女">
+                            <div class="card-body bg-dark">
+                                <div class="d-flex gap-2 mb-2">
+                                    <span class="badge bg-danger">ファンタジー</span>
+                                    <span class="badge bg-secondary">完結</span>
+                                </div>
+                                <h5 class="card-title fw-bold card-title-nowrap text-white">ベイマックス</h5>
+                                <p class="card-text text-white small text-clamp-3">
+                                    美しい最先端都市・サンフランソウキョウ。14歳の天才少年ヒロは、謎の事故によって最愛の兄タダシを失い、すっかり心を閉ざしてしまう。そんな時、タダシが開発したケアロボット「ベイマックス」が起動。ヒロの心身のケアを始める。やがてヒロは、かつて自身が開発したマイクロボットが悪の手に渡っていたことを知り、奮起。ベイマックスや仲間たちとともに戦っていくなかで、自身とも向き合い、成長していく。
+
+
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="rating-stars small">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                        <span class="text-dark ms-1">4.5</span>
+                                    </div>
+                                    <small class="text-muted">3,245件</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card anime-card">
+                            <img src="https://pbs.twimg.com/media/G6bWV4FbkAANtaj.jpg" class="card-img-top" alt="料理バトル">
+                            <div class="card-body bg-dark">
+                                <div class="d-flex gap-2 mb-2">
+                                    <span class="badge" style="background-color: #f97316;">ホラー</span>
+                                    <span class="badge bg-success">放送中</span>
+                                </div>
+                                <h5 class="card-title fw-bold card-title-nowrap text-white">ドールハウス</h5>
+                                <p class="card-text text-white small text-clamp-3">
+                                    5歳の娘を亡くした悲しみに暮れる夫婦が、骨董市で見つけた亡き娘に似た人形に救われるも、新たな娘が生まれたことで人形への関心が薄れ、やがて人形が引き起こす奇妙な出来事に巻き込まれていくサイコホラー・ミステリーです。人形は、最初の娘の魂が宿った存在なのか、あるいは別の呪われた秘密を持つのか、その真実と家族の心の闇が描かれます。
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="rating-stars small">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star"></i>
+                                        <span class="text-dark ms-1">4.1</span>
+                                    </div>
+                                    <small class="text-muted">876件</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 準備中 -->
+                <div id="contentPreparing" class="mb-4 d-none">
+                    <h4 id="preparingMessage" class="text-center py-5"></h4>
+                </div>
+
+                <!-- ページネーション -->
+                <nav aria-label="ページネーション" id="pagination">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">
+                                <i class="bi bi-chevron-left"></i> 前へ
+                            </a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">4</a></li>
+                        <li class="page-item"><a class="page-link" href="#">5</a></li>
+                        <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">26</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">
+                                次へ <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-film"></i> CinemaList</h5>
+                    <p class="text-light">あなたの好きな映画を見つけて、共有しよう。</p>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <h6 class="fw-bold mb-3">サイト情報</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">About</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">利用規約</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">プライバシー</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <h6 class="fw-bold mb-3">サポート</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">ヘルプ</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">お問い合わせ</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h6 class="fw-bold mb-3">フォローする</h6>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="bi bi-twitter fs-4"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-instagram fs-4"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-youtube fs-4"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-discord fs-4"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-light">
+            <p class="text-center text-light mb-0">&copy; 2025 AniListo. All rights reserved.</p>
+        </div>
+    </footer>
+    <button id="backToTopBtn" class="btn shadow d-flex align-items-center justify-content-center">
+        <i class="bi bi-chevron-up"></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="common.js"></script>
+    <script type="text/javascript" src="sort-toggle.js"></script>
+
+
+
+
+
+    <script>
+        // 画面が読み込まれたら開始
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // 画像要素をすべて取得
+            const slides = document.querySelectorAll('.bg-slider img');
+            let currentIndex = 0; // 現在表示している画像の番号（最初は0番目）
+
+            // 3000ミリ秒（＝3秒）ごとに実行するタイマー
+            setInterval(() => {
+                // 1. 今ついている active クラスを外す（ふわっと消える）
+                slides[currentIndex].classList.remove('active');
+
+                // 2. 次の画像の番号を計算（最後の画像なら最初に戻る）
+                currentIndex = (currentIndex + 1) % slides.length;
+
+                // 3. 次の画像に active クラスをつける（ふわっと現れる）
+                slides[currentIndex].classList.add('active');
+
+            }, 2000); // ←ここの数字を変えると切り替え間隔が変わります（例：5000 = 5秒）
+        });
+    </script>
+</body> ```
+
+### 仕組みの解説
+1. **JavaScript**が3秒ごとに、「今の画像から `active` を消す」→「次の画像に `active` をつける」という作業を自動で行います。
+2. **CSS**の `transition: opacity 1.5s` が効いているため、クラスが付け替わる瞬間にパッと切り替わらず、1.5秒かけてじわ〜っと透明度が変化します。
+
+これで自動スライドショーの完成です！
+</body>
+
+</html>

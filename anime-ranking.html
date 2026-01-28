@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ランキング - ChinamaList</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="base.css">
+    <link rel="icon" href="img/favicon (1).ico">
+    <style>
+        .ranking-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            max-width: 900px;
+            margin: 0 auto 1rem;
+        }
+
+        .ranking-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .rank-badge {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 50%;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .rank-1 {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #C39000;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .rank-2 {
+            background: linear-gradient(135deg, #6c757d, #adb5bd);
+            color: #fff;
+            box-shadow: 0 5px 20px rgba(192, 192, 192, 0.5);
+        }
+
+        .rank-3 {
+            background: linear-gradient(135deg, #cd7f32, #e09142);
+            color: #fff;
+            box-shadow: 0 5px 20px rgba(205, 127, 50, 0.5);
+        }
+
+        .rank-other {
+            background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+            color: #666;
+        }
+
+        .anime-thumbnail {
+            width: 90px;
+            height: 125px;
+            object-fit: cover;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .trend-up {
+            color: #10b981;
+        }
+
+        .trend-down {
+            color: #ef4444;
+        }
+
+        .trend-same {
+            color: #6b7280;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .ranking-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .ranking-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ranking-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .ranking-description {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+
+        .ranking-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+        }
+
+        .ranking-action {
+            margin-left: auto;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 992px) {
+            .rank-badge {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .anime-thumbnail {
+                width: 70px;
+                height: 100px;
+            }
+
+            .ranking-title {
+                font-size: 1.1rem;
+            }
+
+            .ranking-description {
+                font-size: 0.85rem;
+            }
+
+            .ranking-meta {
+                font-size: 0.85rem;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-heading {
+                padding: 30px 0;
+            }
+
+            .page-heading h1 {
+                font-size: 2rem;
+            }
+
+            .ranking-card:hover {
+                transform: translateX(5px);
+            }
+
+            .ranking-content {
+                gap: 12px;
+            }
+
+            .anime-thumbnail {
+                width: 60px;
+                height: 85px;
+            }
+
+            .ranking-title {
+                font-size: 1rem;
+            }
+
+            .ranking-description {
+                display: none;
+            }
+
+            .ranking-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .ranking-action {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 10px;
+            }
+
+            .ranking-action .btn {
+                width: 100%;
+            }
+
+            .card-body {
+                padding: 15px;
+            }
+
+            .tab-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .rank-badge {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .anime-thumbnail {
+                width: 50px;
+                height: 70px;
+            }
+
+            .ranking-title {
+                font-size: 0.95rem;
+            }
+
+            .badge {
+                font-size: 0.7rem;
+                padding: 3px 8px;
+            }
+
+            .rating-stars {
+                font-size: 0.85rem;
+            }
+
+            .ranking-meta {
+                font-size: 0.8rem;
+            }
+
+            .page-heading h1 {
+                font-size: 1.75rem;
+            }
+
+            .page-heading .lead {
+                font-size: 1rem;
+            }
+
+            .tab-btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+
+            .rank-1 i,
+            .rank-2 i,
+            .rank-3 i {
+                display: none;
+            }
+
+
+
+
+
+        }
+
+        body {
+            background-color: #1a1a1a !important;
+            /* 真っ黒に近いグレー */
+            color: #ffffff;
+            /* 全体の文字を白に */
+        }
+
+        .ranking-card {
+            background-color: #333333;
+            color: #ffffff;
+
+        }
+
+
+        /* 1. 選択していない時: 暗めのグレー */
+        .tab-btn {
+            background-color: #6c757d;
+            /* コンクリートのような濃いグレー */
+            color: #ffffff;
+            /* 文字は白 */
+            border: 1px solid #6c757d;
+            /* 枠線も同じグレー */
+            transition: all 0.3s ease;
+        }
+
+        /* マウスを乗せた時: 少しだけ明るさを変える */
+        .tab-btn:hover {
+            background-color: #5a6268;
+            /* ホバー時は少し色味を変える */
+            color: #ffffff;
+        }
+
+        /* 2. 選択している時: ネイビー */
+        .tab-btn.active {
+            background-color: #001f3f !important;
+            /* ネイビー */
+            color: #ffffff !important;
+            /* 白文字 */
+            border-color: #001f3f !important;
+            font-weight: bold;
+            /* 選択中は文字を少し太く */
+        }
+
+        /* 1. 基本設定（選択していない時）：ダークグレー */
+        .page-link {
+            color: #ffffff;
+            /* 文字色：白 */
+            background-color: #6c757d;
+            /* 背景色：濃いグレー */
+            border-color: #6c757d;
+            /* 枠線：背景と同じグレー */
+        }
+
+        /* 2. マウスを乗せた時：少し色を変える */
+        .page-link:hover {
+            color: #ffffff;
+            background-color: #5a6268;
+            /* ホバー時は少し暗く */
+            border-color: #5a6268;
+        }
+
+        /* 3. 選択している時（1ページ目など）：ネイビー */
+        .page-item.active .page-link {
+            z-index: 3;
+            color: #ffffff;
+            /* 文字色：白 */
+            background-color: #001f3f;
+            /* 背景色：ネイビー */
+            border-color: #001f3f;
+            /* 枠線：ネイビー */
+        }
+
+        /* 4. 無効なボタン（矢印など）：さらに暗くして区別 */
+        .page-item.disabled .page-link {
+            color: #adb5bd;
+            /* 文字色：薄いグレー */
+            background-color: #343a40;
+            /* 背景色：かなり暗いグレー */
+            border-color: #343a40;
+        }
+
+        /* (おまけ) クリック時の青い枠線を消す */
+        .page-link:focus {
+            box-shadow: 0 0 0 0.25rem rgba(108, 117, 125, 0.5);
+            /* グレーの影にする */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ナビゲーションバー -->
+    <<nav class="navbar navbar-dark bg-dark fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+        <i class="bi bi-film"></i> CinemaList
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">メニュー</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 text-center">
+          <li class="nav-item">
+            <a class="nav-link active" href="index.html">ホーム</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="anime-list.html">作品一覧</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">ランキング</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="anime-mylist.html">マイリスト</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="anime-community.html">コミュニティ</a>
+          </li>
+
+          <li class="nav-item mt-4">
+            <a href="anime-login.html" class="btn btn-light px-5">
+                <i class="bi bi-person-circle"></i> ログイン
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+    <!-- ページヘッダー -->
+    <div class="page-heading">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-3">
+                <i class="bi bi-trophy-fill"></i> ランキング
+            </h1>
+            <p class="lead">みんなが選ぶ人気映画ランキング</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- タブナビゲーション -->
+        <ul class="nav nav-pills nav-fill mb-4" id="rankingTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link tab-btn active" id="overall-tab" data-bs-toggle="pill" data-bs-target="#overall"
+                    type="button" role="tab">
+                    <i class="bi bi-star-fill"></i> 総合<span class="d-none d-lg-inline">ランキング</span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link tab-btn" id="weekly-tab" data-bs-toggle="pill" data-bs-target="#weekly"
+                    type="button" role="tab">
+                    <i class="bi bi-calendar-week"></i> 週間<span class="d-none d-lg-inline">ランキング</span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link tab-btn" id="monthly-tab" data-bs-toggle="pill" data-bs-target="#monthly"
+                    type="button" role="tab">
+                    <i class="bi bi-calendar-month"></i> 月間<span class="d-none d-lg-inline">ランキング</span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link tab-btn" id="seasonal-tab" data-bs-toggle="pill" data-bs-target="#seasonal"
+                    type="button" role="tab">
+                    <i class="bi bi-calendar3"></i> 今期<spna class="d-none d-lg-inline">ランキング</spna>
+                </button>
+            </li>
+        </ul>
+
+        <!-- タブコンテンツ -->
+        <div class="tab-content" id="rankingTabContent">
+            <!-- 総合ランキング -->
+            <div class="tab-pane fade show active" id="overall" role="tabpanel">
+                <!-- 1位 -->
+                <div class="card ranking-card">
+                    <div class="card-body">
+                        <div class="ranking-content">
+                            <div class="rank-badge rank-1">
+                                1
+                                <i class="bi bi-trophy-fill position-absolute d-none d-md-block"
+                                    style="top: -10px; right: -10px; font-size: 1.5rem;"></i>
+                            </div>
+                            <img src="https://shop.toei-video.co.jp/Contents/ProductImages/0/DSTD21074_LL.jpg"
+                                class="anime-thumbnail" alt="1位">
+                            <div class="ranking-info">
+                                <div class="d-flex gap-2 mb-2 flex-wrap">
+                                    <span class="badge bg-primary"> サスペンス</span>
+                                    <span class="badge bg-success">放送中</span>
+                                    <span class="badge bg-warning text-dark">人気急上昇</span>
+                                </div>
+                                <h4 class="ranknig-title">でっちあげ　-殺人教師といわれた-</h4>
+                                <p class="ranking-description text-white">
+                                    ～殺人教師と呼ばれた男』は、小学校教師・薮下誠一が児童への体罰と“いじめ”で告発され、「殺人教師」とバッシングを受ける事件を描く物語です。保護者の訴えは「死に方教えてやろうか」という恫喝など凄惨な内容で、教育委員会はいじめを認定。しかし、法廷で薮下は「全て事実無根のでっちあげ」と全面的に否定し、550人の弁護団が結成されるなど、社会現象を巻き起こす前代未聞の裁判へと発展し、真実をめぐる攻防が繰り広げられます。
+                                </p>
+                                <div class="ranking-meta">
+                                    <div class="rating-stars">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                        <span class="text-dark ms-1 fw-bold">4.9</span>
+                                    </div>
+                                    <span class="text-white">3,456件のレビュー</span>
+                                    <span class="trend-up">
+                                        <i class="bi bi-arrow-up-circle-fill"></i> 先週より +2
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ranking-action">
+                                <button class="btn btn-outline-dark  text-white">詳細</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2位 -->
+                <div class="card ranking-card">
+                    <div class="card-body">
+                        <div class="ranking-content">
+                            <div class="rank-badge rank-2">2</div>
+                            <img src="https://pbs.twimg.com/media/G6bWV4FbkAANtaj.jpg" class="anime-thumbnail" alt="2位">
+                            <div class="ranking-info">
+                                <div class="d-flex gap-2 mb-2 flex-wrap">
+                                    <span class="badge bg-primary">ホラー</span>
+                                    <span class="badge bg-success">放送中</span>
+                                </div>
+                                <h4 class="ranking-title">ドールハウス</h4>
+                                <p class="ranking-description  text-white">
+                                    5歳の娘を亡くした悲しみに暮れる夫婦が、骨董市で見つけた亡き娘に似た人形に救われるも、新たな娘が生まれたことで人形への関心が薄れ、やがて人形が引き起こす奇妙な出来事に巻き込まれていくサイコホラー・ミステリーです。人形は、最初の娘の魂が宿った存在なのか、あるいは別の呪われた秘密を持つのか、その真実と家族の心の闇が描かれます。
+                                </p>
+                                <div class="ranking-meta">
+                                    <div class="rating-stars">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                        <span class="text-dark ms-1 fw-bold">4.7</span>
+                                    </div>
+                                    <span class="text-white">2,890件のレビュー</span>
+                                    <span class="trend-down">
+                                        <i class="bi bi-arrow-down-circle-fill"></i> 先週より -1
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ranking-action">
+                                <button class="btn btn-outline-dark  text-white">詳細</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3位 -->
+                <div class="card ranking-card">
+                    <div class="card-body">
+                        <div class="ranking-content">
+                            <div class="rank-badge rank-3">3</div>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSldI_8on8YnjV02klSHEGfbcQZAgyrv0d2Rw&s"
+                                class="anime-thumbnail" alt="3位">
+                            <div class="ranking-info">
+                                <div class="d-flex gap-2 mb-2 flex-wrap">
+                                    <span class="badge bg-primary">ファンタジー</span>
+                                    <span class="badge bg-success">放送中</span>
+                                </div>
+                                <h4 class="ranking-title">ズートピア２</h4>
+                                <p class="ranking-description  text-white">
+                                    警察官となったジュディとニックが、ズートピアに現れた謎のヘビ「ゲイリー」を追ううちに、「なぜこの街に哺乳類しかいないのか？」というズートピア創設に関わる巨大な謎と、爬虫類たちが隠された暗い過去に迫る物語です。物語は、ジュディとニックが逃亡者となり、正反対な二人の絆が試されながら、ズートピアの真実に迫っていく展開となります。
+                                </p>
+                                <div class="ranking-meta">
+                                    <div class="rating-stars">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                        <span class="text-dark ms-1 fw-bold">4.6</span>
+                                    </div>
+                                    <span class="text-white">2,345件のレビュー</span>
+                                    <span class="trend-up">
+                                        <i class="bi bi-arrow-up-circle-fill"></i> 先週より +1
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ranking-action">
+                                <button class="btn btn-outline-dark  text-white">詳細</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4位以降 -->
+                <div class="card ranking-card">
+                    <div class="card-body">
+                        <div class="ranking-content">
+                            <div class="rank-badge rank-other">4</div>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR447hB7wZQVB0Rvb7XbGRyfoWP5u45f4IQ9A&s"
+                                class="anime-thumbnail" alt="4位">
+                            <div class="ranking-info">
+                                <div class="d-flex gap-2 mb-2 flex-wrap">
+                                    <span class="badge bg-danger">スポーツ</span>
+                                    <span class="badge bg-success">放送中</span>
+                                </div>
+                                <h4 class="ranking-title">ひゃくえむ</h4>
+                                <p class="ranking-description  text-white">
+                                    生まれつき足が速い才能を持つトガシと、現実から逃れるように走る転校生・小宮の出会いから始まる物語で、100m走を通してライバルであり親友となった二人が、成長と共に勝利のプレッシャーや、走ることの意味、人生の苦悩に直面していく姿を描く陸上競技（100m走）がテーマのアニメ映画（原作：魚豊）です。トガシは小宮に走り方を教え、小宮は走りにのめり込み記録を更新。数年後、トップランナーとなったトガシの前に、成長した小宮がライバルとして現れるところで物語はクライマックスを迎えます。
+                                </p>
+                                <div class="ranking-meta">
+                                    <div class="rating-stars">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                        <span class="text-dark ms-1 fw-bold">4.8</span>
+                                    </div>
+                                    <span class="text-white">2,156件のレビュー</span>
+                                    <span class="trend-same">
+                                        <i class="bi bi-dash-circle-fill"></i> 変動なし
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ranking-action">
+                                <button class="btn btn-outline-dark  text-white">詳細</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card ranking-card">
+                    <div class="card-body">
+                        <div class="ranking-content">
+                            <div class="rank-badge rank-other">5</div>
+                            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxMTEhUTExMVFRUXGBYaGBgYGBgdFxYYFxgYFxUaGhsdHiggGBolGxUXIjEhJSkrLi4uGB8zODMtNygtLisBCgoKDg0OGxAQGy8lICUtKy0uNi0tLS8vNS0tLS0tLS8tLS0tLS0tLS0tLS0tLy0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAOEA4QMBIgACEQEDEQH/xAAcAAABBQEBAQAAAAAAAAAAAAAAAgMEBQYHAQj/xABCEAACAQIEAwUFBQYFAgcAAAABAhEAAwQSITEFQVEGEyJhcTKBkaGxB0LB0fAUI1JicpIVstLh8SQzFkNEY4Ki4v/EABoBAQADAQEBAAAAAAAAAAAAAAABAgMEBQb/xAAsEQACAgIBAwQBAwQDAAAAAAAAAQIRAyESBDFBE1FhcYEykbEiodHwBSNC/9oADAMBAAIRAxEAPwDuNFFFAFFFFAUeOzZmygEzzMD4gGo6C7/Cn9zdf6en651Pvp4m9aUlo1vejmrfYgjvP4Un+tv9FLQXf4E/vb/RU4pzilpJqrZZL4EYVGjxAA+RJ+oFS1SvLaUzi8eLbKpVjKs0gSAEyzPT2hVGzWMbJHd0qKrf8Vc+zYuQOZEfejQQZ6/lvSrDYhiCwRFM5hMsNCBB23jfeeW1U5F+FFhNM3sXbSczqsCdSBoNzVeOFXCpV7xIKgaBiZ8QYyzHdXIiNNOlOWeCW1LEy2bPMwNLntDwgSI0E60tk1H3JONxqW1DNME8h0UsT7lVj7utRDxq3si3HOvsoehImY3gxVi9sEQQDsdddRsaYweOtXMwt3EcqSrBWBKkGCCBsaO/cJKroZN6+bhUKoQMniM6qdWgyNdI259dKnmvCY1NYftB2uFjG28l7vbPdtntWsjk3PFkEjUEyuk8qrKSgrZphwzzS4wXi/2NxTOKxaWka5cYIi7sdhrGvvNUVjtjhi6WWfJfYoO6KvmV3AIQnLAOsUdtiTw/Exv3f0YE1LyLi2hHBL1IwmmraLlOJ2SUAvWybgDIM6y6nUFRMkelSZrl93g9u9gMRjFJ71HJtOCfBbw+VFA5RlQn1jpXReG4rvbFq7/HbRv7lB/GqY8jk9/Zp1HTrGri/LTvw1X+/gl0Ckhq8LVucdkiiiiqlgooooAooooAooooAooooBh0EzRXrLrRlqxWhAFDXVWMxCyQBJAknQATua5r2k4jeGNvW2a6bcW2RQ2ICrIhhlsCWkgnxECqPGsgKtFq3cV0cMUS2ZRg2rXLz3m25CuWXUpOkj08X/GOSTcu6vsde4txezhkD33yKzBQcrGWIJAhQTMKfhUbAdoLN+zdvW80WiwbOpUyqB9jqBBHzquxXam1cw1+9hmzG2twqSrDxqmYaMASNd/WsvcuWhh8RdfGNeL93ev28OUVspC22RtSAviWdjC+dTLLvT0VxdIpR/qTTtL+PFa/LNTZ7XqLeEuXrfdDEic2YFbZPsTMNDDWYgc60t68qqXYgKoJJOwAEk/CuOWVW3cxS/suHQNaRlXFXQzKig6IymWZj93MIgCt/wATdsRwlmtqM1zDAhVGmqglVHxAFRjytp2X6npIQlHjpN/zv3fa6+aspuI9qMbc7l7IWxh795bVt3XNdbMdHKnRV0Om+lWVjjeKw2It2Mb3dxLxy2r6DL49AFddgSSBp1G+sVOK4laxI4VaskGHS4yrqUFi3s3T73rFL45jFxuKw+HsnN3V5b15xqtsWz7M7ZjqPWPOM+TTu7ejZ44uoOCSqV62qbp33vX0/Y6DWEwXG8FZv32vWbeHxKO9vwIxNy0YZW8I5xJ91W3au9jSETB92FfR3J8dv+YTpljmAT5c6yX/AIexCdwFWwrW7ouNiEuObrGfHmzKCZ6aj01q+XK09LsYdJhxuDeSXf2dPXv9+1N+TecN41YxK57NxXAiQNxO0qdRPnWYHD7FnieHWzbW2O5vswUczoD9asLPB7AxRxaZlcqQVUwhJ3YiNSdPKRO+te3OH/8AVjFZ5i0bQSNBLZs0z6iIqJTbSspCWOEpcG6cX392qr5+yUOJ4RWab2HDBjmlrYYMDrPOalvctX7JWQ9u6rLIMhlYFTBqlv8AZzCNmuNYQsSSd9STJJAMGatcHaVAqqoVQPCqiAo6AVMZvszLIsaScG7+aMxxPAXMJgBgbea/dxDlQQhCKGjNJ1A0HMzqTsK22Fw3dWbdoH2EVfXKAPwp63c0oetVBR2vorl6iWSNP3bfy2eWxpXpGtNh6dUjStFJHO4kiiiihIUUUUAUUUUAUUUUAUUUUAxdugaUwbgis3xm8/evEjUgRUS3xG4SF2jQ1zvqUnVGixOrMrxzALbxDWZe6rWlZWvNfuuDLI2UIDmMgHUADSmMJiHs2LVxSlq0VKsyWEN1XQEeIka5mU68iRNajifZwtca/cxFwiIRFIQBDBKllhmGYE8uVMcH7NWiVDM1xEZ2Fs6WxnPhDCTny6wSedcji+VHtx6zH6a5O6q9fHz5/sT+GcPd8GBiHLPcQ5joDFyTGnMKwE+VZbiF+0bpt29bdvCvbuZACwCuu8DVxBOta63wizhy3dhlzR4M7FBrMqpJC+6hcKMxZFVSdyFAzHzPOmRVpHLj6lRnKW2n28f5MtwbhNxrq3MPghkFsqf2nKoZiRFzKQzFtN8us8q3HZoX7GHFq/3ZKEhCkAMm4lQoCmZ25RUXDYgqTJqHeYFmL5mXeN4godBE/wDlrp69amGRY0Vz5pZ9NKvy3+9/I+y4e1ca5aS2lxvaKjxeIjkNsxjYCT1ow2NtpmKgAtq2VQCxgatsdjudoPSoYuCMotuQAAMw5DUTmM6eetOWrp0ju1UQJLctJAgRI23rOM25ESjrdv7ZPbHNpCMdN5EbMQPWVA6eIa0wHvHXwqMpnnD+Ie8TkPoTz0pnvW9nvGYlZ8KrsY1BmZ31gDXypsKSQCt3KdcztHLoPdp19KvP5Kxj9FlhnYMWLaEeyJIUzuDp9Kfs3CfnVLhzdJ8dy2mgkdYMnfYRpvp16uX1SGz3XIjkGXTNMA7c46xHQzKerKvHb/wXK3hlOtP2H51RYB1A+8F1YEwdzP3Z01qzw3Ek+6pfpGs6xyk/KoxTblsrPHXYt1u6CnkuSJqjvYxyQAEWZ0J10OgglT05dRSLeJvNESo12WBB5nMAdP5T8a61kpmPpOrLm7pTqcvWq5MG0H94+oHXfqMxaKftXogGZ099WUqKNexcUUUVsUCiiigCiiigCiiigCiiigMjxNWa48Rox18qr8PdyTIzSakcUzd7dIP3j9aiLmK6b15GTI1KzthFNUWBWbZ6dDyqNgrmQmKQuJ0yswUwZB3gb6VEa8qDST5wY+JgGksm00I43TRbX7wcg/Gpd4MqKVTNJ18hBM/EAe+qC1xEHUDUA/qQCKmjHtcXKDERopOYGNdVaY33X3aV0Qmm22VeKSq0MYzFH7wFshhrI1XNrv5fOPdBBaR+9zeySAD88saGRpy06UzxCS2gA9fzIVp25moovg66tBAIGZonbQr5elc05Ns68cEkTWS0N8zkDLOYa7nZTOmZoMTrTq3FOhRRrpMkzAH3oI8IgDoOlR8KxcQS+vIwPkc3yqxw2HkawNhALH4gQDVY2xOcV3FvxBgoHsjlpE/3abRsaj3Tccay0xprtv8AzLOv06VZjCZRuQRvlCifgJ+dJFlJzHXpJJ+prWd1sxjkj4RVW5BIOVd9CQJ1n7rGfhUqzgiRM9YhCDvOjeEfWpt5dNgPSmrl4SF12qjlTpl1kcuw7YwJAJjfmxQTv/Cp6n4mp+EsCIaD/cdNvvEz8qgDFDRelS7F6ojkXIrNScdlslgBYGnyFIskDTSkJjAdKZDjN613Oa1RxU/JZBt6hs3jGnOvbhMaaVFvOdOW31pknoRRo6KKK6zMKKKKAKKKKAKKKKAKKKKAx3FSO8fX7xqG6Aj2tDyhfLeQZ+FWPGB4mXSSzfWqg24PpXl5Y0zqxy0e3cGkbkactvLT2flUHIp21B0gaeugipuJuaCRpVZhbXjlTpMx6VlKn2NVkmvIp7InRRpz0kfGnsZCwDmaAJhiAfULAJovPmcxtzFJ5GN+nrVI3y0WctETivFLVmCVm4/igRoOpPxqRwXFi+hyrBGpB/CsVxDGpfvXLlppRQFzbg5ZRivlI9+/OkcJ4peUnubZdgjN42Cgge0NxsNd9hXf6MePbZiuT8m8sg6zy6VN4Yra9N6YwtstbR9PEASBtJ3g8xNSrS5diJFcbtMeCxLaa7mkXLBA6j6VGt4uKk2b06Eb860bUolFaZW3cflJU6+dPWFYnOBNJ4ngwAzRtSrDOAGHslaxUakuRvy1oRdeWnSalm5AGtVuHkktG5qddtRBPOqNPlZdyVUWFi4p3peKWAGqrFzKN6k2+Irkht40raOVNUzCUHdomLiWNOqQ/rNUQ4hlNN2OLFXmoXULsyXhfg6DRRRXsnGFFFFAFFFFAFFFFAFFFFAYXiTk3rpg6O31qF3ubWrDi6Q90g/faR76g4W1IJ5V5OZM64DeIGVddqr8MxBDDX8qn8SsOQI2qDhmgkMMpJ0PKawppGlotsLakO0ARqSeQrnnb/tTks3LFg6ucrXJgx94KPMaSTzOnOnu13aN1Jw6GBAzkHcnYadBr+tMJxxR3YMyZ18pBr0um6dJc5dzmnNt0uxH4FxQ2g6T4Sug6GRmj1gfCtt2UZrge7mebWVlC3ckgCQG8JhRJPnqK5rYSWAkCTEkwBPU8qm4SxdLMhm2FHiJ3UESN4knlHLXaSOiUbLwycVR0P7Pu2L3EOGukeADuzse75L55Z67eldCAB8QIKkb/WuHcJ4HfRldV1EldVQHTqzDSt/2Ex92bljEI63FC3AGESrkqxHIrKrqJGtcnUY1+pERNdcu5RqOehq3sPn1OmkiqHGXQQddBrT3D8cAszOnwrmi6VFnG9l5xJQyacxULCXR+zkR4lkVBvY5isiQKjcPdj3iSZ3H41Sb3ZePamO4bG5CqMRoaseJY5WUBdxWQvIwuqx/WlWK4kZGjU1Rt0a8U2mTLl3TWmO8kiaYS8YAYaxSHujccqx4F7JjLG9MudZ86QQWkzrFIJ8UVKiDr1FFFfRHlBRRRQBRRRQBRRRQBRRRQGK7QWQLjfzPrTWEtLO9HHb5LPA2dx8CfyqlwF9iIJ+8a8ac/wCrsdkI3HuXXaC6mQBT4hyFZ/iGIRbBuNtbDN8ASPp86e4hcAV41PI/hWO7a8RIwqoNGuEgjoFgn6j41aK9XIkT+iNmCxvEmZyWnMdTPPTX6U3ZxyHw3FkciNx+dQsYZb9fqKYiPMV7DOZaNEnDlZc1u4jKN1ZRI9xqbgLalRpmCOYAMBdFYQNdCZMetVXAO5Zz3ikALIAZvEZG5nYDWK8v8WNvEFlUKitrbXRWG3LcxzqHHyRz8HUOzFjDLZN67h0vXGc5jcVGaJhUXNoqgRpoKusfaszYu4WxctD94LiCAgVoDQuaFYOqE5dCNelV3AMfhltK2HPgY5hmBMHZtG5iI6SDV9w7BOwcXLrrbaO8OYBIIJBQ5pHjK8l0gCuSTu0dfBKFsrTbzk6+EVHtPBMeyPnVsbGGQktiwf6EJ05a7GvLXEMBqq95cPPVR/vWMMLrZhPIr0Qb/EpSFXapnZnGB3gjxQQfwpOK7R4ewpK4RYA3Mtp6Qaj8P7eXLylrNtbazEhInrHpSeGDW5BTl4Q/jOEYhni3adgG3iBHqam2Ozd8alVQTJzOB9JqJ2n4lirdgOt/O7bJJUeY8O9Z/B4u49u290lmuSdJ01gjUnUVnxw1e2aReV+yNdc4VbUk3MTZHQAyaj2sHgbclsRcck7KsD5iszxHBF0JVmSCCPFlmOXmKrDw4Net3mkgEZkmdNgwX4VaHpvtES5rvI3o4lgk9mxdc9WaB8jUDiHbixhgGGGtrJ0ORnJ94H41VIzZmJOmsaGY5bxSMbhUuIUKnXnpoeR0mpU5J/pSIcYNbk2dvooor0jlCiiigCiiigCiiigCiiigMXjFDG+FEkXW/wAxn8aqrHCrzT+7YQ0gkR9asb2PvNiLiM+RQ9wDLGwYhTPmBWcxeJvHEkG5NiGiZksBsSTsdYgcq8mUMVu22dMXOtIu7vCjADNaTrmcD6TXKvtaw6pfs5LwZe7PsTAYuZgczAEnyFbu9ZR0KmVkHUEzr5jUGsTjuyK3LTKzt3quxt3G8QZSBo2YyBp7tD1B26dwUrUWvsjJyqm0c/axIk5iSOkH1jmPOKbxNyTvmJGpiADuQB5HT8Km38Lcw75LgdWGw3Vh1WCAw+VGIKFYKMXYyCwVPXbT1Jr0e5kViXCuxp/A4O5fuC3bUu7GAPxJ5Adauuz3ZdsXdyo3doJNxzqFAjVRuxM+nmK61wfgmFwqZLIMkDNcb23A21AEAHkIqk5qISsa4L2bS3hxYtPmuICcrbtMlih5665T56nYN8Cxwa6cLcuM6tmHdhiBayAtmjac4QQep0qTiAVIYHxDYkyG6weekyNx8zNwyYVUvYhEIxN8W7TEnQg3AXjodiTzhTrrWKUZ7fc0eWUY8fAxxnsoxuLctw6gars2b+nY6dDNU+F4cli7eyWWXvMpgrBRwfFoYOUjl1rbd54yOo19eXy+tJ4na72FLN4VzLHQHxe6GH9orj0kWtsyl7M/3CB5/wDFRsHhjazKMoQtmjTwmIMGavX4eoE6n1NIXDL/AA1T1ETxZX3/ABEEuG6QB+VJtWRyDb8tpO+5NaHEWhkUgAe4UxaWq+o60FAp7tmB7BH68qVasN0HvNWGIEnXQU3ZYDmPjU8pE8UhCYNuoHoKQ+HMwWJqacQsCDPoDTTGGGkkiREaevQ+VVtjR1eiiivaOQKKKKAKKKKAKKKKAKKKKA5zjcMf2i6AGINy5pmgasSfrTAwhB9kCrTGXQL9zc+Ntgeppq8TOin5V485Sto6opUQ3wxAOo+FVt7C67mrl3ncR0568vdULFA76fOqJsmkYb7RcN/0gfWUuIfcwKEeW418hXMb1wnnpXd7mHW4rI4BRgQRGhB3rjPaPgj4W8bT6jdG/jQ7H15EcjNel0s048fJjNbs1v2TXWzX+mTTXnmUEeXL1itncv5RJMwwBO/tGDz6x8Kw32Tjx4kQTK25jeJYkTyBgCtfjbim3cAKyFOxGVY1EDnrGppl7kw2WVnEiSGAZDup+RHmOtMXbYR1CMSCwIDjYqCVk/e10nQ6nUzWb4fi1KC43PrO3pyq5uXVdbVySMjK5EGYRg0x0gGsnaL0anRSmd9x4tgCeZOlMcXxyWHsNnQnOVKltcjAmY3jwge6ltw4XQty2UdTqGDSCvUETzqp+0PAAYMYgQ17DsmsiQlwhGU/yyVPllrNR3QstccHVvDlytqh9oFfzj9a1El5jwx1jWo/ZzG22SHcAsZEElV/uYwIHly0r2zxSzcuMlm9auldyrGNTA3H0rP05Lsi1os2H7vVmPlpH0qHCnmfifzqVas3GzL4Pmaivg3B3E+Q/OqfkjQ3dOmXkDMcpiJ+GlKBjYfKvRhDElj8hSEw4nc/Go17k/gdFzSaYz6g6fGnzgFid/Umlth0GwFRonZ1OiiivbOMKKKKAKKKKAKKKKAKKKKAwXEbkX7sA+22wPU0zfk6hWqVxFm767CE+NuYjemnuuVHhHTf/avFklbOtPRGhj934mmr4aOXzqTmuHbL86V+yO25A91VRJXWrDExKr7v96559q1l5sFjKjvFnozZD9F+tdQPCmO9w+4CuLfabgb1nGHvGLowzWmMxl/hHIFdiB5H71dfSr/suzLJ2J32dqvd3oPjd1VhyCASkj70sW8POPKDvF4PYvCCMhAMukAqIg5j7MRPhgwN4rjPAuJXbVwd0dSywIkFpEAjmCYrY8T45dW02Fu2WtEsoeGDIVYHwZlOoaJ0OsMOtdeSNyKJ0WFjC4ey0JijiEmVJTIBHmJzL5iAfTWp+LxwKt3a5zrmUKzawD4ggadCD4mAgiufrxnKQCoEebegiAY5afoX2CxxOBxV1LrAIoQ5ZC5rugyfe08A1j2tNKiUDTkqLbg/HFde77zEbmLaooWCZJLZgdSSdNunKrTil7EXMJcw1vB3QtweJkZBlAhjo+UknTTmDoaxnDe2Di4XcA5suZVGX2VCjKeWg2MiSYia2HD+LIwBF5SACZzBTPKQSCpjkarPHxldFeVowvE1x2FzWXs3BmWA0AyCI3QssjXSZHOovDf29GzrhrzHKR/2bkEEg7AdVFdYwvH7Z8L3rLSQYe5bJJG258qk8e7ZYPDwLl0C60HKgNwAHmwU+H4z5Gp5tLUSLd9yo7DXsUxuG5aayWywLqldNYA5tG0kDlpuTdXTdzGWXQxsaWjm4iX7d626sdCq7dQZOhHMHUU5xPCXAJ7yZ38IFcE5cpWaIjCzdJ0c+4CpA4S0as1PWcIMozXXHoQKbdbH3rjH1c1W/kEZ8JrBZj76Va4Ws+Igerf70ylu1n1cZfNjU03MIOSH4mn7g6bRRRXsnMFFFFAFFFFAFFFFAFFFFAY7iSsbtzxqBmP3fPzNQUUeIG7EbeyKRxmy/fXSLKHxtrn3knWOVQLOFvMdLdpR5kn8K8d8XJ7R0puuxNw7Jrmu/A/lSmvWerH3tUKzh7ouFC1pdJkKx09JFPsjHT9oT3J/+6q5Rj5/39hv2Gr+ItfwE/3Vyj7VMbnvJaUBUtqCREHvGkn1GTJ8TXUzhnM/9Uix/Kv4tXH/ALSsJcXGO5bvUItxcA8PsgZSRoGGU6dINdPSSjKen4KTuii4KQbipBzuyC24nMjT4YGxklddxGlaTtbw27Ytlrz3bj3HQq5acvd5jBnVdHMRO1R/s84YHxIu3O8S3bVmV1gS/sqASDO5Jjp51tO1fC7d+xCX2dlIcK7Agldx4UBBKlgPMiunJnUZqL/gooWrOVW1e/cA5uwHkMzBR7pIra8YwiWcHetJs3iOvNYj/KKxNy7kuTaLLsRrqOehq5XtCblspfPKMwH+YD6itJpuqEWZ4NTjPKweWo/Gmm30r0VrZAmKVbaDSTXoqAdZ7O38PbwyZLlzxhXaZPjKqG2EaZQP/jVo2MDCQt9vMI5rJdhO0RSybPd5zbJI0JORjPLoxPxFbA9qb+Qqtk/2H8687Lak9F19juBbvFlMPeuecAfVqfuI4/8ARuPUp/qqqwfFcQqZVs3FJJJaBprMAT50n/FsXJIsvtzyfiayfO9Jf3JuPuP3r7hgThmEnTxJE+6rm1hsToRZsL/Vc/Jazl7FYtys2TAMxmTfcbU49zGHXIQeQLgD5Daj512RFx92d3ooor1jIKKKKAKKKKAKKKKAKKKKA5nxfhuIN+8ReIU3HgZfuliQPa6eVRbfA7u5ut8F/EGtljlHeP6mo+UVxPBC+xZNmYTs+wJPeXNd4K6/Kh+zknV7n95H0FaiK9ipWGHsNmPxPZeR7dyP62/GvcFgALd3BEqzQl5FYEsVzFXOaPEAQBG4zDkRGvj9RVJ2m7PnEBHs3jYxFok27oWYnR1YTqpG48hvtW2JRhKzKabKMdm7bolo7211UZhAd7jAkCNSQ2nlUDi3Y1gmaw2QgGQQzZtoiSdfzqVdxuJwEpcurjMVeh2chbVu1ZTwoIA1YsXjQT4idtc/jvtJxli4ou2bRt5hMZhcOoPtDw6f0iR8ael/6QT3RkeM8Iv2v3TWgzE5hkHjGUMPZgPkjxTliPQgZl2EQANCdfLkPdG/nXUuO9qbXEcvdXWsPZZnttDSNMreLYgry0316Vj8VdPhW6q3RkYWbjDISwdmzEqzLdBJAIeSVC7aTqlovyM5dtlTBEERI6aTSQalcRe5cd71wau7MzRALMSTA5D5VEqSR4W5nVRoTrzjkPM8qaIjQ70pW0g/HpTmMaTmgKGAgDy0O+skgnXrQkmdneKHDYi3eAkKfGv8SHRx6xt5gHlX0RhcNZuIty3kdGEqymQRXzMK759nOOt2uGW3uXFFtSRnYqFB0XKNST4piQCZ2rPIvJWSNIOGL0Fe/wCGJ/CvyqThMVbuqHtsrqZ1UgjQwR6g0/7qzKUQf8OXoPhSrWAUEaDcVKJ9KXbOo9R9aA1VFFFdBcKKKKAKKKKAKKKKAKKKKAzeNb94/qajk0/jj+8f1NR81YMk9k9flXs/qKSG869mhJ7P6ivM3n8qM1JL0KtGF+0HCMbqPaQ3LrWm8IBObucxQZfW63LWsXigL+H/AHijOhFu6BEK8A6RtqSI5FW5QK6L214eMQbFstlLs9sGebgFf/sq/Gub8MtHJjNCMj2wQRBGZWWSORDWSI5E10QukYtd39FbwXE2sPYvi4xLElVttbzo8AFddlJLGfLWDTdvFJdbuVsopAYq5IkiTOrGFEkkDSKp8bcl8uaFJkztNa/s5hlbCxkGVoZm5lmJgT0AH61qNvRpOoqzD32dZQ6LO3KaYq24/wAPFpvB7J5dD+VJwXAnuAMXtop5s4mPT8Ki0XTsr8OsneNDrV3guHi6BbAVQSP3jD2PMtso67c6j4/h6YdlK3rd+VJhdlMx4hPvHX3awnuM5H3jynbXpyAqHvsXXYRcwjK+Q5M38ty2y/3qxX51aW3AAU3c4knKgbIGiM3iyy0aT00mKjcSFjvB3GcrkQNnEHOBFwgSdCdfeeUVL7NYQXsTbtnVcwLiYGUGWk8gRp76iT0EvJ2f7PrQt4Czr7Ya56B2JUf25a0Qv/rT86oUuwAAQANAAQAANAAOQinBeP8AF85rm5lHEuxiB+ooF8SPXyqpD6b0yMQZ0PzpzHE6lRRRXYQFFFFAFFFFAFFFFAFFFFAZbHR3j6/ePOo7EV5xHERduD+ZvrUK7ifI1zt7LEo3POvO+HWqw4mvP2n9a1FgszfHUUhsSOtV3feQ+NNOxJ/4/OlkDXaQd7bABysrBlOvLcadROvIxWO7R8StG3cuABblzW7B9phzKx4JIkiT4iSNzWxdCfu/r41AxXA7VzV7Kt6qprWGXiqM5Y7dnHOG8YuWu87rJ4woJZFYjLJ0kGNT8hWu4BjXu2Lhd4uqSWJAGdI1WNBySI2y1sE7OWx7NpR6KKVd7M2mWGXTykH5VCyJMvOPJUcm4hN4wBMa/hTdjg7n7v6+FdbwnY3CptbHnJJ+tWVrgdgbKo+FVc/YutI5KnAWK5Dosg6DnBE7dDU3B9nVQyoct1jX3E7V1ZOF2xsF+VPpg1G0VRyZNnN8D2W/9mf6orQ8P4E6aLbRR1G/wA/GtcLcdKIqrTfcWVljh7Dcz7v96s8DwvNOp8InTcyYgSQP+KAf1Ip/DYkoSYnTmqnXlvsPSpSVkEkcFQkAXQVMgGNSy6kaHYDn5jrVVxDABWAVpkAkHdT0MEifzq2PFD0Hn4VPPkCYGnzqsxNws06DXSFj5DSatLjWip0KiiiukgKKKKAKKKKAKKKKAKKKKAwfEP8Av3f62+pqLdoornfcsNWt6QfaFe0VBAX+XpShsK8oqAejc0ha9oqGWQ/Y3Woj/wDdWvaKEMsL24py5RRRFiFf9o+6jD70UVAHMHz/AF1pdjc0UVYhjj70tK8ooQIuUhKKKBnQqKKK6ioUUUUAUUUUB//Z"
+                                class="anime-thumbnail" alt="5位">
+                            <div class="ranking-info">
+                                <div class="d-flex gap-2 mb-2 flex-wrap">
+                                    <span class="badge bg-info">コメディ</span>
+                                    <span class="badge bg-success">放送中</span>
+                                </div>
+                                <h4 class="ranking-title">最強のふたり</h4>
+                                <p class="ranking-description  text-white">
+                                    、パラグライダー事故で全身麻痺となった大富豪フィリップと、介護経験ゼロの貧しい移民青年ドリスが、互いに正反対の人生を歩む中で介護人として出会い、衝突しながらも次第に深い友情を育み、人生に喜びを取り戻していく実話ベースの感動コメディです。何もかもが違う二人ですが、お互いを「障害者」や「貧しい青年」として特別扱いせず、本音で接し合うことで、単なる雇い主と介護人の関係を超えた「最強の友情」を築いていく物語です。
+                                </p>
+                                <div class="ranking-meta">
+                                    <div class="rating-stars">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star"></i>
+                                        <span class="text-dark ms-1 fw-bold">4.2</span>
+                                    </div>
+                                    <span class="text-white">987件のレビュー</span>
+                                    <span class="trend-down">
+                                        <i class="bi bi-arrow-down-circle-fill"></i> 先週より -2
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ranking-action">
+                                <button class="btn btn-outline-dark  text-white">詳細</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card ranking-card">
+                    <div class="card-body">
+                        <div class="ranking-content">
+                            <div class="rank-badge rank-other">6</div>
+                            <img src="https://media.eiga.com/images/movie/104011/photo/822b8478df9f7e75/320.jpg"
+                                class="anime-thumbnail" alt="6位">
+                            <div class="ranking-info">
+                                <div class="d-flex gap-2 mb-2 flex-wrap">
+                                    <span class="badge bg-info">ミステリー</span>
+                                    <span class="badge bg-success">放送中</span>
+                                </div>
+                                <h4 class="ranking-title">教場　Reunion</h4>
+                                <p class="ranking-description  text-white">
+                                    警察学校を舞台に鬼教官・風間公親（木村拓哉）が205期生をふるいにかける様子と、風間の身に迫る危機に対抗するため卒業生たちが再集結する物語で、前編はNetflixで配信され、後編『教場
+                                    Requiem』は劇場公開される作品です。第205期生たちの秘密や人間関係が描かれる一方で、過去の事件で風間と因縁のある十崎の妹・紗羅の行方を追う卒業生たちの姿も描かれ、誘拐犯が卒業式で事件を起こそうとしていることを突き止めます。
+                                </p>
+                                <div class="ranking-meta">
+                                    <div class="rating-stars">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star"></i>
+                                        <span class="text-dark ms-1 fw-bold">4.4</span>
+                                    </div>
+                                    <span class="text-white">1,987件のレビュー</span>
+                                    <span class="trend-up">
+                                        <i class="bi bi-arrow-up-circle-fill"></i> 先週より +3
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ranking-action">
+                                <button class="btn btn-outline-dark  text-white">詳細</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card ranking-card">
+                    <div class="card-body">
+                        <div class="ranking-content">
+                            <div class="rank-badge rank-other">7</div>
+                            <img src="https://media.eiga.com/images/movie/102338/photo/24ed6c1a79f74753.jpg"
+                                class="anime-thumbnail" alt="7位">
+                            <div class="ranking-info">
+                                <div class="d-flex gap-2 mb-2 flex-wrap">
+                                    <span class="badge bg-dark">ホラー</span>
+                                    <span class="badge bg-success">放送中</span>
+                                </div>
+                                <h4 class="ranking-title">カラダ探し　THE LAST NIGHT</h4>
+                                <p class="ranking-description  text-white">
+                                    前作で「カラダ探し」を終えたはずの明日香が消え、3年後、陸人たち新高校生5人が真夜中の遊園地で新たな「カラダ探し」に巻き込まれる物語。そこに現れる「赤い人」の恐怖と、3年間も明日香を探し続ける高広が加わり、消えた明日香を救うため、呪いの連鎖を終わらせるための「カラダ探し」に挑む内容です。
+                                </p>
+                                <div class="ranking-meta">
+                                    <div class="rating-stars">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star"></i>
+                                        <span class="text-dark ms-1 fw-bold">4.3</span>
+                                    </div>
+                                    <span class="text-white">1,567件のレビュー</span>
+                                    <span class="trend-same">
+                                        <i class="bi bi-dash-circle-fill"></i> 変動なし
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ranking-action">
+                                <button class="btn btn-outline-dark text-white">詳細</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ページネーション -->
+                <nav aria-label="ランキングページネーション" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#"><i class="bi bi-chevron-left"></i></a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">4</a></li>
+                        <li class="page-item"><a class="page-link" href="#">5</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#"><i class="bi bi-chevron-right"></i></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- 週間・月間・今期ランキングは同様の構造 -->
+            <div class="tab-pane fade" id="weekly" role="tabpanel">
+                <div class="text-center py-5">
+                    <h4>週間ランキングの内容がここに表示されます</h4>
+                    <p class="text-muted">（総合ランキングと同様の構造）</p>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="monthly" role="tabpanel">
+                <div class="text-center py-5">
+                    <h4>月間ランキングの内容がここに表示されます</h4>
+                    <p class="text-muted">（総合ランキングと同様の構造）</p>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="seasonal" role="tabpanel">
+                <div class="text-center py-5">
+                    <h4>今期ランキングの内容がここに表示されます</h4>
+                    <p class="text-muted">（総合ランキングと同様の構造）</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- フッター -->
+    <footer class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-film"></i>ChinemaList</h5>
+                    <p class="text-light">あなたの好きな映画を見つけて、共有しよう。</p>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <h6 class="fw-bold mb-3">サイト情報</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">About</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">利用規約</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">プライバシー</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <h6 class="fw-bold mb-3">サポート</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">ヘルプ</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">お問い合わせ</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h6 class="fw-bold mb-3">フォローする</h6>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="bi bi-twitter fs-4"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-instagram fs-4"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-youtube fs-4"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-discord fs-4"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-light">
+            <p class="text-center text-light mb-0">&copy; 2025 AniListo. All rights reserved.</p>
+        </div>
+    </footer>
+    <button id="backToTopBtn" class="btn shadow d-flex align-items-center justify-content-center">
+        <i class="bi bi-chevron-up"></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="common.js"></script>
+</body>
+
+</html>

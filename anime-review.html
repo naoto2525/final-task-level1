@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>レビュー - 異世界の勇者 ～運命の旅路～ - AnimeHub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="base.css">
+    <link rel="icon" href="img/favicon (1).ico">
+    <style>
+        /* .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0 40px 0;
+            margin-bottom: 40px;
+        } */
+
+        .breadcrumb-item+.breadcrumb-item::before {
+            color: #fff !important;
+        }
+
+        .rating-stars {
+            color: #fbbf24;
+        }
+
+        .rating-summary {
+            background: linear-gradient(135deg, #4c1d95 0%, #312e81 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .rating-large {
+            font-size: 4rem;
+            font-weight: bold;
+        }
+
+        .review-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .review-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .helpful-btn {
+            transition: all 0.2s ease;
+        }
+
+        .helpful-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .progress {
+            height: 25px;
+        }
+
+        .filter-badge {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-badge:hover {
+            transform: translateY(-2px);
+        }
+
+        .filter-badge.active {
+            background-color: var(--primary-color) !important;
+        }
+
+        .btn-outline-dark:hover {
+            background-color: transparent;
+            color: #666;
+        }
+
+        .btn-outline-dark.active:hover {
+            background-color: var(--bs-dark) !important;
+            color: var(--bs-white) !important;
+            border-color: var(--bs-dark) !important;
+        }
+
+        @media (max-width: 768px) {
+            .border-md-0 {
+                border: none;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .border-md-0 {
+                border-right: 1px solid gray;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ナビゲーションバー -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="bi bi-film"></i> CinemaHub
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">ホーム</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="anime-list.html">作品一覧</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="anime-ranking.html">ランキング</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="anime-mylist.html">マイリスト</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="anime-community.html">コミュニティ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-lg-none" href="anime-login.html">ログイン</a>
+                    </li>
+                </ul>
+                <a href="anime-login.html" class="btn btn-light ms-3 d-none d-lg-block">
+                    <i class="bi bi-person-circle"></i> ログイン</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ページヘッダー -->
+    <div class="page-heading">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html" class="text-white">ホーム</a></li>
+                    <li class="breadcrumb-item"><a href="anime-list.html" class="text-white">作品一覧</a></li>
+                    <li class="breadcrumb-item"><a href="anime-detail.html" class="text-white">異世界の勇者</a></li>
+                    <li class="breadcrumb-item active text-white" aria-current="page">レビュー</li>
+                </ol>
+            </nav>
+            <h1 class="display-4 fw-bold mb-3">レビュー・評価</h1>
+            <p class="lead">でっちあげ ~殺人教師といわれた男~</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <!-- メインコンテンツ -->
+            <div class="col-lg-8">
+                <!-- 評価サマリー -->
+                <div class="rating-summary mb-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 text-center border-md-0 mb-4 mb-md-0">
+                            <div class="rating-large mb-2">4.5</div>
+                            <div class="rating-stars fs-2 fs-lg-4 mb-2">
+                                <i class="bi bi-star-fill d-inline-block"></i>
+                                <i class="bi bi-star-fill d-inline-block"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-half"></i>
+                            </div>
+                            <p class="mb-0">1,234件のレビュー</p>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="mb-2">
+                                <div class="d-flex align-items-center">
+                                    <span class="me-2" style="min-width: 60px;">5つ星</span>
+                                    <div class="progress flex-grow-1">
+                                        <div class="progress-bar bg-warning" style="width: 65%">65%</div>
+                                    </div>
+                                    <span class="ms-2 text-end" style="min-width: 50px;">802件</span>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <div class="d-flex align-items-center">
+                                    <span class="me-2" style="min-width: 60px;">4つ星</span>
+                                    <div class="progress flex-grow-1">
+                                        <div class="progress-bar bg-warning" style="width: 20%">20%</div>
+                                    </div>
+                                    <span class="ms-2 text-end" style="min-width: 50px;">247件</span>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <div class="d-flex align-items-center">
+                                    <span class="me-2" style="min-width: 60px;">3つ星</span>
+                                    <div class="progress flex-grow-1">
+                                        <div class="progress-bar bg-warning" style="width: 10%">10%</div>
+                                    </div>
+                                    <span class="ms-2 text-end" style="min-width: 50px;">123件</span>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <div class="d-flex align-items-center">
+                                    <span class="me-2" style="min-width: 60px;">2つ星</span>
+                                    <div class="progress flex-grow-1">
+                                        <div class="progress-bar bg-warning" style="width: 3%">3%</div>
+                                    </div>
+                                    <span class="ms-2 text-end" style="min-width: 50px;">37件</span>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <div class="d-flex align-items-center">
+                                    <span class="me-2" style="min-width: 60px;">1つ星</span>
+                                    <div class="progress flex-grow-1">
+                                        <div class="progress-bar bg-warning" style="width: 2%">2%</div>
+                                    </div>
+                                    <span class="ms-2 text-end" style="min-width: 50px;">25件</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- フィルター -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                            <div>
+                                <h5 class="mb-0"><i class="bi bi-funnel-fill"></i> フィルター</h5>
+                            </div>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <span class="badge bg-primary filter-badge active">すべて</span>
+                                <span class="badge bg-secondary filter-badge">5つ星</span>
+                                <span class="badge bg-secondary filter-badge">4つ星</span>
+                                <span class="badge bg-secondary filter-badge">3つ星</span>
+                                <span class="badge bg-secondary filter-badge">2つ星以下</span>
+                                <span class="badge bg-success filter-badge">ネタバレなし</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ソート -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="mb-0">レビュー一覧 (1,234件)</h5>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-dark sort-btn active btn-sm-lg" data-sort="new">
+                            <span class="d-none d-md-inline">新着順</span>
+                            <span class="d-inline d-md-none">新着</span>
+                        </button>
+
+                        <button type="button" class="btn btn-outline-dark sort-btn" data-sort="reference">
+                            <span class="d-none d-md-inline">参考になった順</span>
+                            <span class="d-inline d-md-none">参考順</span>
+                        </button>
+                        <button type="button" class="btn btn-outline-dark sort-btn" data-sort="rating">
+                            <span class="d-none d-md-inline">評価が高い順</span>
+                            <span class="d-inline d-md-none">評価順</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- レビューカード -->
+                <div id="contentDisplay">
+                    <div class="card review-card mb-4">
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                                <img src="img/daikyoukinn.webp" class="user-avatar me-3"
+                                    alt="ユーザー">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div>
+                                            <h5 class="mb-1 fw-bold">大胸筋</h5>
+                                            <div class="rating-stars">
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <small class="text-muted">2024年11月15日</small>
+                                            <div>
+                                                <span class="badge bg-success">視聴済み</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h6 class="fw-bold mb-2">久々に星5!</h6>
+                                    <p class="card-text">
+                                        被害側、被害側、目線が違えば起きた出来事が全く変わる みたいな話しかと思ったら違った。
+                                        いぢめや嫌がらせは胸糞なシーン満載だったけど、途中はどう落ち着くのか分からずドキドキだった。
+                                        物足りない結末だとしても、実際これしかないよね…ってなんと言えない気持ちにさせられる。
+                                        !!
+                                    </p>
+                                    <div class="d-flex gap-2 mb-3">
+                                        <span class="badge bg-info">ストーリー良</span>
+                                        <span class="badge bg-info">作画良</span>
+                                        <span class="badge bg-info">音楽良</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-sm btn-outline-primary helpful-btn">
+                                                <i class="bi bi-hand-thumbs-up"></i> 参考になった (234)
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary helpful-btn">
+                                                <i class="bi bi-reply"></i> 返信
+                                            </button>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-flag"></i> 報告
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card review-card mb-4">
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                                <img src="img/nitoukinn.jpg" class="user-avatar me-3"
+                                    alt="ユーザー">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div>
+                                            <h5 class="mb-1 fw-bold">上腕二頭筋</h5>
+                                            <div class="rating-stars">
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-half"></i>
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <small class="text-muted">2024年11月14日</small>
+                                            <div>
+                                                <span class="badge bg-warning text-dark">視聴中</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h6 class="fw-bold mb-2"></h6>
+                                    <p class="card-text">
+                                        劇場で見れなかったので、配信で拝見しました。
+                                        実在の事件ということにただ驚いてます。
+                                        どんなに社会や周りの人間に恵まれなくても必ずどこかに味方や支えてくれる人間がいるのだと思いました。
+
+                                    </p>
+                                    <div class="d-flex gap-2 mb-3">
+                                        <span class="badge bg-info">展開期待</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-sm btn-outline-primary helpful-btn">
+                                                <i class="bi bi-hand-thumbs-up"></i> 参考になった (189)
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary helpful-btn">
+                                                <i class="bi bi-reply"></i> 返信
+                                            </button>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-flag"></i> 報告
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card review-card mb-4">
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                                <img src="img/neko.webp" class="user-avatar me-3"
+                                    alt="ユーザー">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div>
+                                            <h5 class="mb-1 fw-bold">耳小骨</h5>
+                                            <div class="rating-stars">
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star"></i>
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <small class="text-muted">2024年11月13日</small>
+                                            <div>
+                                                <span class="badge bg-warning text-dark">視聴中</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <p class="card-text">
+                                        基とされる福岡市の事件について、確認してみたら、本作はかなりノンフィクションであることに衝撃。
+                                        「でっちあげ」シーンの綾野剛による恐ろしい演技、後半の心労していく演技、すごかった。
+                                        そして、柴咲コウの魂が抜けたような冷たい表情、人前では同情を求めるようにやや感情的になる表情と声色。怖すぎる。
+                                        両者まさに怪演。
+                                        小林薫も良い。彼の演技好き。
+                                        一方の声だけで、犯人をしたてあげるマスコミ。マスコミの情報だけを信じ、一方的に叩きまくる世間。そして彼らは一人の人間とその家族の生活、人生を変え、崩壊させる。恐ろしい。
+                                        特に前半はすごくストレス感じる。
+                                        見ていて、イライラするし、心が落ち着かない。
+                                        教師が保護者に物を言えない世間。
+                                        一旦謝罪をさせる学校。
+                                        冤罪を認めさせられる教師。
+                                        しんどい。
+
+                                    </p>
+                                    <div class="d-flex gap-2 mb-3">
+                                        <span class="badge bg-info">テンポ良</span>
+                                        <span class="badge bg-info">俳優良</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-sm btn-outline-primary helpful-btn">
+                                                <i class="bi bi-hand-thumbs-up"></i> 参考になった (145)
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary helpful-btn">
+                                                <i class="bi bi-reply"></i> 返信
+                                            </button>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-flag"></i> 報告
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card review-card mb-4">
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                                <img src="img/yannki-.jpg" class="user-avatar me-3"
+                                    alt="ユーザー">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div>
+                                            <h5 class="mb-1 fw-bold">宇宙のヤンキー</h5>
+                                            <div class="rating-stars">
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-half"></i>
+                                                <i class="bi bi-star"></i>
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <small class="text-muted">2024年11月12日</small>
+                                            <div>
+                                                <span class="badge bg-warning text-dark">視聴中</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h6 class="fw-bold mb-2"></h6>
+                                    <p class="card-text">
+                                        開始1時間過ぎるまでめっっっちゃイライラする。先生ももう少しハッキリ否定できないのか…あんな冤罪かけられ続けるくらいなら担任喜んで降りるけど
+                                        弁護士おじちゃん出てきた瞬間の救われようが、、まだ裁判してないのに半端ない😭
+                                    </p>
+                                    <div class="d-flex gap-2 mb-3">
+                                        <span class="badge bg-warning text-dark">展開やや予測可</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-sm btn-outline-primary helpful-btn">
+                                                <i class="bi bi-hand-thumbs-up"></i> 参考になった (98)
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary helpful-btn">
+                                                <i class="bi bi-reply"></i> 返信
+                                            </button>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-flag"></i> 報告
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card review-card mb-4">
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                                <img src="img/masuo.jpg" class="user-avatar me-3" alt="ユーザー">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div>
+                                            <h5 class="mb-1 fw-bold">マスオTV</h5>
+                                            <div class="rating-stars">
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <small class="text-muted">2024年11月11日</small>
+                                            <div>
+                                                <span class="badge bg-warning text-dark">視聴中</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h6 class="fw-bold mb-2"></h6>
+                                    <p class="card-text">
+                                        僕の動画と同じくらい面白い映画です！
+                                    </p>
+                                    <div class="d-flex gap-2 mb-3">
+                                        <span class="badge bg-info">音楽神</span>
+                                        <span class="badge bg-info">俳優神</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-sm btn-outline-primary helpful-btn">
+                                                <i class="bi bi-hand-thumbs-up"></i> 参考になった (1  )
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary helpful-btn">
+                                                <i class="bi bi-reply"></i> 返信
+                                            </button>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-flag"></i> 報告
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 準備中 -->
+                <div id="contentPreparing" class="mb-4 d-none">
+                    <h4 id="preparingMessage" class="text-center py-5"></h4>
+                </div>
+
+                <!-- ページネーション -->
+                <nav aria-label="レビューページネーション" id="pagination">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#"><i class="bi bi-chevron-left"></i></a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">4</a></li>
+                        <li class="page-item"><a class="page-link" href="#">5</a></li>
+                        <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">41</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#"><i class="bi bi-chevron-right"></i></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- サイドバー -->
+            <div class="col-lg-4">
+                <!-- レビューを書くボタン -->
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <i class="bi bi-pencil-square display-4 text-primary mb-3"></i>
+                        <h5 class="card-title fw-bold mb-3">この作品を見ましたか?</h5>
+                        <p class="card-text text-muted">あなたの感想をシェアしよう!</p>
+                        <button class="btn btn-primary btn-lg w-100">
+                            <i class="bi bi-pencil-square"></i> レビューを書く
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 評価の傾向 -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-3"><i class="bi bi-graph-up"></i> 評価の傾向</h5>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>ストーリー</span>
+                                <span class="badge bg-success">4.6</span>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-success" style="width: 92%"></div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>音楽</span>
+                                <span class="badge bg-success">4.8</span>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-success" style="width: 96%"></div>
+                            </div>
+                        </div>
+                       
+
+                    </div>
+                </div>
+
+                <!-- よく使われるタグ -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-3"><i class="bi bi-tags-fill"></i> よく使われるタグ</h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-primary fs-6">感動 <span
+                                    class="badge bg-light text-dark ms-1">456</span></span>
+                            <span class="badge bg-primary fs-6">面白い <span
+                                    class="badge bg-light text-dark ms-1">389</span></span>
+                            <span class="badge bg-primary fs-6">作画良 <span
+                                    class="badge bg-light text-dark ms-1">298</span></span>
+                            <span class="badge bg-primary fs-6">王道 <span
+                                    class="badge bg-light text-dark ms-1">267</span></span>
+                            <span class="badge bg-primary fs-6">熱い <span
+                                    class="badge bg-light text-dark ms-1">234</span></span>
+                            <span class="badge bg-primary fs-6">続き気になる <span
+                                    class="badge bg-light text-dark ms-1">198</span></span>
+                            <span class="badge bg-primary fs-6">音楽良 <span
+                                    class="badge bg-light text-dark ms-1">176</span></span>
+                            <span class="badge bg-primary fs-6">キャラ良 <span
+                                    class="badge bg-light text-dark ms-1">145</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 年齢層別評価 -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-3"><i class="bi bi-people-fill"></i> 年齢層別評価</h5>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>10代</span>
+                                <div class="rating-stars small">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-half"></i>
+                                    <span class="text-dark ms-1">4.6</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>20代</span>
+                                <div class="rating-stars small">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-half"></i>
+                                    <span class="text-dark ms-1">4.5</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>30代</span>
+                                <div class="rating-stars small">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star"></i>
+                                    <span class="text-dark ms-1">4.3</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>40代以上</span>
+                                <div class="rating-stars small">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star"></i>
+                                    <span class="text-dark ms-1">4.2</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 視聴方法別評価 -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-3"><i class="bi bi-tv-fill"></i> 視聴方法</h5>
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between">
+                                <span>TV放送</span>
+                                <strong>45%</strong>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar bg-info" style="width: 45%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between">
+                                <span>動画配信</span>
+                                <strong>42%</strong>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar bg-info" style="width: 42%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between">
+                                <span>録画視聴</span>
+                                <strong>13%</strong>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar bg-info" style="width: 13%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-film"></i> CinemaList</h5>
+                    <p class="text-light">あなたの好きな映画を見つけて、共有しよう。</p>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <h6 class="fw-bold mb-3">サイト情報</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">About</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">利用規約</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">プライバシー</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <h6 class="fw-bold mb-3">サポート</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">ヘルプ</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">お問い合わせ</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h6 class="fw-bold mb-3">フォローする</h6>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="bi bi-twitter fs-4"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-instagram fs-4"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-youtube fs-4"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-discord fs-4"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-light">
+            <p class="text-center text-light mb-0">&copy; 2025 AnimeHub. All rights reserved.</p>
+        </div>
+    </footer>
+    <button id="backToTopBtn" class="btn shadow d-flex align-items-center justify-content-center">
+        <i class="bi bi-chevron-up"></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="common.js"></script>
+    <script type="text/javascript" src="sort-toggle.js"></script>
+</body>
+
+</html>
